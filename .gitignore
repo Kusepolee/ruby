@@ -11,5 +11,22 @@ bootstrap/cache/
 .env.php
 .env
 
-# Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
-.rocketeer/
+._.DS_Sortore
+Thumbs.db
+composer.lock
+
+#uploads
+public/upload/advice/*
+public/upload/crm/*
+public/upload/member/*
+public/upload/product/*
+public/upload/resource/*
+
+#config files
+config/restrose.*
+
+#custom filse
+public/custom/
+
+#ico
+public/favicon.*
