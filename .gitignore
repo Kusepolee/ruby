@@ -28,4 +28,4 @@ config/restrose.*
 public/favicon.*
 
 #custom
-public/custom/
+#public/custom/
