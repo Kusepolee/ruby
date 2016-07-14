@@ -26,3 +26,6 @@ config/restrose.*
 
 #ico
 public/favicon.*
+
+#custom
+public/custom/
