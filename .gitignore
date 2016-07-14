@@ -23,10 +23,10 @@ public/bower_components/
 
 #uploads
 #public/upload/advice/.gitignore
-public/upload/crm/*
-public/upload/member/*
-public/upload/product/*
-public/upload/resource/*
+#public/upload/crm/*
+#public/upload/member/*
+#public/upload/product/*
+#public/upload/resource/*
 
 #config files
 config/restrose.*
