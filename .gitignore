@@ -22,7 +22,7 @@ composer.lock
 public/bower_components/
 
 #uploads
-public/upload/advice/*
+#public/upload/advice/.gitignore
 public/upload/crm/*
 public/upload/member/*
 public/upload/product/*
@@ -30,9 +30,6 @@ public/upload/resource/*
 
 #config files
 config/restrose.*
-
-#custom filse
-public/custom/
 
 #ico
 public/favicon.*
