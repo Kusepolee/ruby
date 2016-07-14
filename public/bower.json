@@ -1,0 +1,27 @@
+{
+  "name": "restrose",
+  "authors": [
+    "Kris <me@restrose.net>"
+  ],
+  "description": "restrose wechat projects",
+  "main": "main.js",
+  "keywords": [
+    "restrose"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "Croppie": "croppie#^2.2.0",
+    "fullcalendar": "^2.9.0",
+    "iCheck": "icheck#^1.0.2"
+  }
+}

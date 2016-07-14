@@ -11,9 +11,15 @@ bootstrap/cache/
 .env.php
 .env
 
+#common
 ._.DS_Sortore
 Thumbs.db
+
+#composer.lock
 composer.lock
+
+#bower folder
+public/bower_components/
 
 #uploads
 public/upload/advice/*
