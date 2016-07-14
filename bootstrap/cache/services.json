@@ -32,7 +32,8 @@
         "SimpleSoftwareIO\\QrCode\\QrCodeServiceProvider",
         "Barryvdh\\DomPDF\\ServiceProvider",
         "Maatwebsite\\Excel\\ExcelServiceProvider",
-        "iscms\\Alisms\\AlidayuServiceProvider"
+        "iscms\\Alisms\\AlidayuServiceProvider",
+        "Intervention\\Image\\ImageServiceProvider"
     ],
     "eager": [
         "Illuminate\\Auth\\AuthServiceProvider",
@@ -53,7 +54,8 @@
         "FooWeChat\\Providers\\RestRoseServiceProvider",
         "Barryvdh\\DomPDF\\ServiceProvider",
         "Maatwebsite\\Excel\\ExcelServiceProvider",
-        "iscms\\Alisms\\AlidayuServiceProvider"
+        "iscms\\Alisms\\AlidayuServiceProvider",
+        "Intervention\\Image\\ImageServiceProvider"
     ],
     "deferred": {
         "command.app.name": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
