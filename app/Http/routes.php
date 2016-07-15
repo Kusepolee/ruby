@@ -134,7 +134,7 @@ Route::get('/test', function () {
 	Mail::send('welcome', ['user' => $user], function ($m) use ($user) {
             $m->from('note@mail.henjou.com', '恒久滚塑');
 
-            $m->to('7569300@qq.com', 'kris Ni')->subject('自动通知');
+            $m->to('7569300@qq.com', 'kris Ni')->subject('自动通知系统');
     });
 });
 
