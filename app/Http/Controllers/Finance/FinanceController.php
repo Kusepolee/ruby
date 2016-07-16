@@ -28,7 +28,7 @@ class FinanceController extends Controller
 	public function index()
 	{
 		$a = new Auth;
-		if($a->auth(['admin'=>'no', 'user'=>'2', 'position'=>'>=总监', 'department'=>'>=运营部|资源部'])){
+		if($a->auth(['admin'=>'no', 'position'=>'>=总监', 'department'=>'>=运营部|资源部'])){
 			$outs = FinanceOuts::where(function ($query) { 
 	                            if(count($this->seekDpArray)) $query->whereIn('finance_outs.out_about', $this->seekDpArray);
 	                            if ($this->seekName != '' && $this->seekName != null) {
@@ -47,8 +47,10 @@ class FinanceController extends Controller
 	                        })
 							->orderBy('tran_date', 'desc')
 							->leftjoin('members as a', 'finance_trans.tran_from', '=', 'a.id')
+							->leftjoin('members as b', 'finance_trans.createdBy', '=', 'b.id')
+							->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
 							->leftjoin('config', 'finance_trans.tran_type', '=', 'config.id')
-							->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType')
+							->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType', 'b.name as createdByName', 'c.name as toName')
 							->paginate(30);
 			
 
@@ -78,12 +80,14 @@ class FinanceController extends Controller
 	                                $query->where('finance_trans.tran_to', 'LIKE', '%'.$this->seekName.'%');
 	                            }
 	                        })
-							->whereIn('tran_to', [$name, $user])
+							->whereIn('tran_to', [$name, $id])
 							->orwhere('tran_from', $id)
 							->orderBy('tran_date', 'desc')
 							->leftjoin('members as a', 'finance_trans.tran_from', '=', 'a.id')
+							->leftjoin('members as b', 'finance_trans.createdBy', '=', 'b.id')
+							->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
 							->leftjoin('config', 'finance_trans.tran_type', '=', 'config.id')
-							->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType')
+							->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType', 'b.name as createdByName', 'c.name as toName')
 							->paginate(30);
 
 		}else{
@@ -96,12 +100,14 @@ class FinanceController extends Controller
 							->leftjoin('config', 'finance_outs.out_bill', '=', 'config.id')
 							->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName')
 							->paginate(30);
-			$trans = FinanceTrans::where('tran_to', $members)
+			$trans = FinanceTrans::where('tran_to', $id)
 							->orwhere('tran_from', $id)
 							->orderBy('tran_date', 'desc')
 							->leftjoin('members as a', 'finance_trans.tran_from', '=', 'a.id')
+							->leftjoin('members as b', 'finance_trans.createdBy', '=', 'b.id')
+							->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
 							->leftjoin('config', 'finance_trans.tran_type', '=', 'config.id')
-							->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType')
+							->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType', 'b.name as createdByName', 'c.name as toName')
 							->paginate(30);
 		}
 
@@ -149,10 +155,10 @@ class FinanceController extends Controller
         $w = new WeChatAPI;
         $h = new Helper;
 
-        $body = '[资金支出]'.$request->out_user.' 支出: ¥ '.$request->out_amount.' 用途: '.$request->out_item;
+        $body = '[资金支出]'.$request->out_user.' 支出: ¥ '.floatval($request->out_amount).' 用途: '.$request->out_item;
 
         $array = [
-              'user'       => '8|6|2',//8|6|2
+              'user'       => '8|6',//8|6|2
               // 'department' => '资源部',
               'seek'       => '>=:经理@运营部',
               'self'       => 'own',
@@ -173,11 +179,12 @@ class FinanceController extends Controller
 	*/
 	public function tran($id)
 	{
-		$toId = Member::find($id)->work_id;
-		$user = Member::find($id)->name;
-		$boss = Session::get('id');
+		$M_work_id = Member::find($id)->work_id;
+		$M_name = Member::find($id)->name;
+		$S_id = Session::get('id');
+		$S_name = Session::get('name');
 
-		return view('finance.finance_trans', ['user'=>$user, 'boss'=>$boss, 'toId'=>$toId]);
+		return view('finance.finance_trans', ['S_name'=>$S_name, 'S_id'=>$S_id, 'M_id'=>$id, 'M_name'=>$M_name, 'M_work_id'=>$M_work_id]);
 	}
 
 	/**
@@ -185,37 +192,133 @@ class FinanceController extends Controller
 	*/
 	public function tranStore(Requests\Finance\FinanceTranRequest $request)
 	{
-		$input = $request->all();
-		
-		Financetrans::create($input);
-
-		//微信通知		
 		$s = new Select;
         $w = new WeChatAPI;
         $h = new Helper;
-        $giver = Member::find($request->tran_from)->name;
+        $input = $request->all();
+        $input['tran_state'] = 0;
+        $input['createdBy'] = $request->S_id;
 
-        $body = '[资金流向]'.$giver.' -> '.$request->tran_to.' : ¥ '.$request->tran_amount.' 用途: '.$request->tran_item;
+        if($request->f_or_t != 1){
+			$input['tran_from'] = $request->S_id;
+			$input['tran_to'] = $request->M_id;
+			
+			$id = Financetrans::create($input)->id;
 
-        $work_id = $request->work_id;
-        
-        $user = '8|6|2|'.$work_id;
-        $array = [
-              'user'       => $user,//8|6|2
-              // 'department' => '资源部',
-              'seek'       => '>=:经理@运营部', 
-              'self'       => 'own',
-            ];
-        
-        $url = 'https://'.$h->custom('url').'/finance';
-        $picurl = 'https://'.$h->custom('url').'/custom/image/news/finance.png';
-        $arr_news = [['title'=>'财务','description'=>$body,'url'=>$url,'picurl'=>$picurl]];
+	        $body = '[资金流向]'.$request->S_name.' -> '.$request->M_name.' : ¥ '.floatval($request->tran_amount).' 用途: '.$request->tran_item;
+
+        }else{
+			$input['tran_from'] = $request->M_id;
+			$input['tran_to'] = $request->S_name;
+			
+			$id = Financetrans::create($input)->id;
+
+	        $body = '[资金流向]'.$request->M_name.' -> '.$request->S_name.' : ¥ '.floatval($request->tran_amount).' 用途: '.$request->tran_item;
+
+        }
+
+        $work_id = $request->M_work_id;
+
+	        $array_1 = [
+	              'user'       => $work_id,//8|6|2
+	              // 'department' => '资源部',
+	              // 'seek'       => '>=:经理@运营部', 
+	              // 'self'       => 'own',
+	            ];
+	        $array_2 = [
+	              'user'       => '8|6',//8|6|2
+	              // 'department' => '资源部',
+	              'seek'       => '>=:经理@运营部', 
+	              'self'       => 'own',
+	            ];
+
+        $url_1 = 'http://'.$h->custom('url').'/finance/trans/note/'.$id;
+        $url_2 = 'http://'.$h->custom('url').'/finance/trans/show/'.$id;
+        $picurl = 'http://'.$h->custom('url').'/custom/image/news/finance.png';
+        $arr_news_1 = [['title'=>'财务','description'=>$body,'url'=>$url_1,'picurl'=>$picurl]];
+        $arr_news_2 = [['title'=>'财务','description'=>$body,'url'=>$url_2,'picurl'=>$picurl]];
         
         $w->safe = 0;
-        $w->sendNews($s->select($array), $arr_news);
+        $w->sendNews($s->select($array_1), $arr_news_1);
+        $w->sendNews($s->select($array_2), $arr_news_2);
 
 		return redirect('/finance');
 	}
+
+    /**
+    * 资金往来确认提醒
+    */
+    public function tranNote($id)
+    {      
+        $state = FinanceTrans::find($id)->tran_state;
+        
+        if($state != 1){
+        	return view('note',['color'=>'info', 'type'=>'6','code'=>'6.2', 'btn1'=>'确认', 'link1'=>'/finance/trans/confirm/'.$id, 'btn2'=>'稍后确认', 'link2'=>'/finance']);
+    	}else{
+    		return view('note',['color'=>'success', 'type'=>'5', 'code'=>'5.3', 'btn1'=>'返回', 'link1'=>'/finance/trans/show/'.$id]);
+    	}
+	    
+    }
+
+    /**
+    * 资金往来确认
+    */
+    public function outShow($id)
+    {
+    	$rec = FinanceOuts::leftjoin('departments', 'finance_outs.out_about', '=', 'departments.id')
+							->leftjoin('config', 'finance_outs.out_bill', '=', 'config.id')
+							->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName')
+							->find($id);
+    	return view('finance.finance_outs_show', ['rec'=>$rec]);
+    }
+
+    /**
+    * 资金往来确认
+    */
+    public function tranShow($id)
+    {
+    	$rec = FinanceTrans::leftjoin('members as a', 'finance_trans.tran_from', '=', 'a.id')
+							->leftjoin('members as b', 'finance_trans.createdBy', '=', 'b.id')
+							->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
+							->leftjoin('config', 'finance_trans.tran_type', '=', 'config.id')
+							->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType', 'b.name as createdByName', 'c.name as toName')
+							->find($id);
+    	return view('finance.finance_trans_show', ['rec'=>$rec]);
+    }
+
+    /**
+    * 资金往来确认
+    */
+    public function tranConfirm($id)
+    {
+    	$rec = FinanceTrans::find($id);
+    	$rec->update(['tran_state' => 1]);
+    	$fromName = Member::find($rec->tran_from)->name;
+    	$fromWorkId = Member::find($rec->tran_from)->work_id;
+    	$toName = Member::find($rec->tran_to)->name;
+    	$toWorkId = Member::find($rec->tran_to)->work_id;
+    	$S_name = Session::get('name');
+
+    	$s = new Select;
+        $w = new WeChatAPI;
+        $h = new Helper;
+
+        $body = '[资金往来] 您创建的信息: '.$fromName.' -> '.$toName.' : ¥ '.floatval($rec->tran_amount).' 用途: '.$rec->tran_item."\n".'已由 '.$S_name.' 确认';
+
+        if($rec->createdBy != $rec->tran_from){
+	        $array = [
+	              'user'       => $fromWorkId,
+	            ];
+        }else{
+        	$array = [
+	              'user'       => $toWorkId,
+	            ];
+        }
+        
+        $w->sendText($s->select($array), $body);
+
+    	return redirect('/finance/trans/note/'.$id);
+    }
 
 	/**
     * 查询
@@ -243,5 +346,4 @@ class FinanceController extends Controller
        
         return $this->index();       
     }
-
-}    
+} 

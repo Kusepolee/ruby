@@ -13,7 +13,7 @@ class CreateFinanceOutsTable extends Migration
     public function up()
     {
         Schema::create('finance_outs', function (Blueprint $table) {
-            $table->increments('out_id');
+            $table->increments('id');
             $table->string('out_user');
             $table->decimal('out_amount', 15, 5)->nullable();
             $table->string('out_item');

@@ -102,8 +102,12 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::get('/finance', 'Finance\FinanceController@index');
 	Route::get('/finance/outs', 'Finance\FinanceController@out');
 	Route::post('/finance/outs/store', 'Finance\FinanceController@outStore');
+	Route::get('/finance/outs/show/{id}', 'Finance\FinanceController@outShow');
 	Route::get('/finance/trans/{id}', 'Finance\FinanceController@tran');
 	Route::post('/finance/trans/store', 'Finance\FinanceController@tranStore');
+	Route::get('/finance/trans/note/{id}', 'Finance\FinanceController@tranNote');
+	Route::get('/finance/trans/show/{id}', 'Finance\FinanceController@tranShow');
+	Route::get('/finance/trans/confirm/{id}', 'Finance\FinanceController@tranConfirm');
 	Route::post('/finance/seek', 'Finance\FinanceController@financeSeek');
 
 	//面板
