@@ -53,9 +53,7 @@ END:VCARD';
 			@endif
 		<!-- finance tran  -->
 		<ul class="dropdown-menu" id = "show">
-			@if($a->auth(['admin'=>'no', 'position'=>'>=经理']))
-			<li class="m_2"><a href="/finance/trans/{{$rec->id}}"><i class="glyphicon glyphicon-yen menu_icon_warning"></i> 资金给予</a></li>
-			@endif
+			<li class="m_2"><a href="/finance/trans/{{ $rec->id }}"><i class="glyphicon glyphicon-yen menu_icon_warning"></i> 资金往来</a></li>
 		</ul>	
 		<!-- finance tran end -->
 		</li></ul>
@@ -97,7 +95,7 @@ END:VCARD';
 							@endif
 							<!-- finance tran -->
 							<li class="divider"></li>
-							<li class="m_2"><a href="/finance/trans/{{$rec->id}}"><i class="glyphicon glyphicon-yen menu_icon_warning"></i> 资金给予</a></li>
+							<li class="m_2"><a href="/finance/trans/{{ $rec->id }}"><i class="glyphicon glyphicon-yen menu_icon_warning"></i> 资金往来</a></li>
 							<!-- finance tran end -->
 							<li class="divider"></li>
 							<li class="m_2"><a href="/member/delete/{{$rec->id}}"><i class="glyphicon glyphicon-remove menu_icon_danger"></i> 删除用户</a></li>

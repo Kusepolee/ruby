@@ -29,8 +29,7 @@ class FinanceTranRequest extends Request
             'tran_item' => 'required|min:1|max:20',
             'tran_date' => 'required',
             'tran_type' => 'required',
-            'tran_from' => 'required',
-            'tran_to' => 'required',
+            'f_or_t' => 'required',
         ];
     }
 }

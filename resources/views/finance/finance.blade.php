@@ -55,9 +55,9 @@
                             <tbody>
                             @foreach($outs as $out)
                                 <tr>
-                                	<td>{{ $out->out_id }}</td>
+                                	<td>{{ $out->id }}</td>
                                 	<td>{{ $out->out_user }}</td>
-                                	<td>{{ floatval($out->out_amount) }}</td>
+                                	<td><a href="/finance/outs/show/{{ $out->id }}" class="btn btn-sm btn-info">{{ floatval($out->out_amount) }}</td>
                                 	<td>{{ $out->out_date }}</td>
                                 	@if(!$a->usingWechat())                        
                                     <td>{{ $out->out_item }}</td>
@@ -101,19 +101,25 @@
                                     @if(!$a->usingWechat())                        
                                     <th>方式</th>
                                     <th>内容</th>
+                                    <th>创建人</th>
                                     @endif
                                 </tr>
                             </thead>
                             <tbody>
                             @foreach($trans as $tran)
                             	<tr>
-                            		<td>{{ $tran->tran_id }}</td>
-                                	<td>{{ floatval($tran->tran_amount) }}</td>
-                                	<td>{{ $tran->fromName }} --> {{ $tran->tran_to }}</td>
+                            		<td>{{ $tran->id }}</td>
+                                    @if($tran->tran_state != 1)
+                                	<td><a href="/finance/trans/show/{{ $tran->id }}" class="btn btn-sm btn-danger">{{ floatval($tran->tran_amount) }}</td>
+                                    @else
+                                    <td><a href="/finance/trans/show/{{ $tran->id }}" class="btn btn-sm btn-info">{{ floatval($tran->tran_amount) }}</td>
+                                    @endif
+                                	<td>{{ $tran->fromName }} --> {{ $tran->toName }}</td>
                                 	<td>{{ $tran->tran_date }}</td>
                                 	@if(!$a->usingWechat())                        
                                     <td>{{ $tran->tranType }}</td>
                                     <td>{{ $tran->tran_item }}</td>
+                                    <td>{{ $tran->createdByName }}</td>
                                     @endif
                             	</tr>
                             @endforeach    

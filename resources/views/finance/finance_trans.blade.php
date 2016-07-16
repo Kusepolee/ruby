@@ -3,6 +3,7 @@ $h = new FooWeChat\Helpers\Helper;
 
 $type = $h->getSelect('financeTran');
 
+$f_or_t = ['给予','收到']
 ?>
 @extends('head')
 
@@ -12,19 +13,24 @@ $type = $h->getSelect('financeTran');
   
 	<ol class="breadcrumb">
 		<li><a href="/finance">财务</a></li>
-		<li class="active" >资金给予</li>
+		<li class="active" >资金往来</li>
 	</ol>
 		<div class="panel panel-info">
 			<div class="panel-heading">
-			<i class="glyphicon glyphicon-user"></i>&nbsp{{ $user }}
-			<!-- <a style=" float:right;" href="#" class="glyphicon glyphicon-question-sign"></a> -->
+			<i class="glyphicon glyphicon-jpy"></i>&nbsp资金往来
 			</div>
 			<div class="panel-body">
 
 			{!! Form::open(['url'=>'finance/trans/store', 'role' => 'form']) !!}
-			{!! Form::hidden('tran_to', $user) !!}
-			{!! Form::hidden('tran_from', $boss) !!}
-			{!! Form::hidden('work_id', $toId) !!}
+			{!! Form::hidden('S_id', $S_id) !!}
+			{!! Form::hidden('S_name', $S_name) !!}
+			{!! Form::hidden('M_id', $M_id) !!}
+			{!! Form::hidden('M_name', $M_name) !!}
+			{!! Form::hidden('M_work_id', $M_work_id) !!}
+
+			<div class="form-group">
+			  {!! Form::select('f_or_t',$f_or_t,null,['class'=>'form-control']); !!}
+			</div>
 
 			<div class="form-group">
 			  {!! Form::text('tran_amount',null,['placeholder'=>'金额', 'class'=>'form-control']) !!}
