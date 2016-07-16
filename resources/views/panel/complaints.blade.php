@@ -11,6 +11,7 @@
   
 	<ol class="breadcrumb">
 		<li><a href="/panel">面板首页</a></li>
+		<li><a href="/panel/complaints/record">投诉记录</a></li>
 	</ol>
 		<div class="panel panel-info">
 			<div class="panel-heading">
