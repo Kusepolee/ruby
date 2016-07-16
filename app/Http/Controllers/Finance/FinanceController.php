@@ -209,7 +209,7 @@ class FinanceController extends Controller
 
         }else{
 			$input['tran_from'] = $request->M_id;
-			$input['tran_to'] = $request->S_name;
+			$input['tran_to'] = $request->S_id;
 			
 			$id = Financetrans::create($input)->id;
 
@@ -294,9 +294,7 @@ class FinanceController extends Controller
     	$rec = FinanceTrans::find($id);
     	$rec->update(['tran_state' => 1]);
     	$fromName = Member::find($rec->tran_from)->name;
-    	$fromWorkId = Member::find($rec->tran_from)->work_id;
     	$toName = Member::find($rec->tran_to)->name;
-    	$toWorkId = Member::find($rec->tran_to)->work_id;
     	$S_name = Session::get('name');
 
     	$s = new Select;
@@ -305,15 +303,11 @@ class FinanceController extends Controller
 
         $body = '[资金往来] 您创建的信息: '.$fromName.' -> '.$toName.' : ¥ '.floatval($rec->tran_amount).' 用途: '.$rec->tran_item."\n".'已由 '.$S_name.' 确认';
 
-        if($rec->createdBy != $rec->tran_from){
-	        $array = [
-	              'user'       => $fromWorkId,
-	            ];
-        }else{
-        	$array = [
-	              'user'       => $toWorkId,
-	            ];
-        }
+        $work_id = Member::find($rec->createdBy)->work_id;
+
+    	$array = [
+              'user'       => $work_id,
+            ];       
         
         $w->sendText($s->select($array), $body);
 
