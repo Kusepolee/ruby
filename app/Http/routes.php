@@ -143,7 +143,14 @@ Route::get('/test', function () {
 });
 
 Route::get('/test1', function () {
-	return redirect('/panel');
+	//return redirect('/panel');
+	$a = new FooWeChat\Authorize\Auth;
+	if($a->auth(['position' => '=总监', 'department' => '=运营部'])){
+		echo "ok";
+	}else{
+		echo "string";
+	}
+
 });
 
 

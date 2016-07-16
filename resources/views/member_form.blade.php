@@ -8,7 +8,7 @@ if($a->isRoot()){
   //$department = $h->getAllDepartments();
   $department = $h->getInsideDepartments();
   $position = $h->getAllPositions();
-}elseif(!$a->isRoot() && $a->isAdmin()){
+}elseif(!$a->isRoot() || $a->isAdmin() || $a->auth(['position' => '=总监', 'department' => '=运营部'])){
   $department = $h->getInsideDepartments();
   $position = $h->getAllPositions();
 }else{
