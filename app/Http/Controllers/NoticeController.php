@@ -103,10 +103,13 @@ class NoticeController extends Controller
         $s = new Select;
         $w->sendText($s->select(['user'=>$my_work_id]), $body);
 
+
+
         //群发
         if(count($work_ids)){
             $work_ids_str = implode('|',$work_ids);
             $w->sendText($s->select(['user'=>$work_ids_str]), $request->notice);
+            echo $work_ids_str;
         }
 
         //日志

@@ -23,7 +23,4 @@ class ChartController extends Controller
      * Other functions
      *
      */
-
-
-
 }
