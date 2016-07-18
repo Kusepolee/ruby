@@ -164,8 +164,8 @@ class FinanceController extends Controller
               'self'       => 'own',
             ];
         
-        $url = 'https://'.$h->custom('url').'/finance';
-        $picurl = 'https://'.$h->custom('url').'/custom/image/news/finance.png';
+        $url = $h->app('ssl').'://'.$h->custom('url').'/finance';
+        $picurl = $h->app('ssl').'://'.$h->custom('url').'/custom/image/news/finance.png';
         $arr_news = [['title'=>'财务','description'=>$body,'url'=>$url,'picurl'=>$picurl]];
         
         $w->safe = 0;
@@ -232,9 +232,9 @@ class FinanceController extends Controller
 	              'self'       => 'own',
 	            ];
 
-        $url_1 = 'http://'.$h->custom('url').'/finance/trans/note/'.$id;
-        $url_2 = 'http://'.$h->custom('url').'/finance/trans/show/'.$id;
-        $picurl = 'http://'.$h->custom('url').'/custom/image/news/finance.png';
+        $url_1 = $h->app('ssl').'://'.$h->custom('url').'/finance/trans/note/'.$id;
+        $url_2 = $h->app('ssl').'://'.$h->custom('url').'/finance/trans/show/'.$id;
+        $picurl = $h->app('ssl').'://'.$h->custom('url').'/custom/image/news/finance.png';
         $arr_news_1 = [['title'=>'财务','description'=>$body,'url'=>$url_1,'picurl'=>$picurl]];
         $arr_news_2 = [['title'=>'财务','description'=>$body,'url'=>$url_2,'picurl'=>$picurl]];
         

@@ -139,8 +139,8 @@ class ResourceController extends Controller
               //'self'       => 'own',
             ];
         
-        $url = 'http://'.$h->custom('url').'/resource/show/'.$id;
-        $picurl = 'http://'.$h->custom('url').'/custom/image/news/resource.png';
+        $url = $h->app('ssl').'://'.$h->custom('url').'/resource/show/'.$id;
+        $picurl = $h->app('ssl').'://'.$h->custom('url').'/custom/image/news/resource.png';
         $arr_news = [['title'=>'资源','description'=>$body,'url'=>$url,'picurl'=>$picurl]];
         
         $w->safe = 0;
@@ -274,8 +274,8 @@ class ResourceController extends Controller
               //'self'       => 'own',
             ];
         
-        $url = 'http://'.$h->custom('url').'/resource/show/'.$id;
-        $picurl = 'http://'.$h->custom('url').'/custom/image/news/resource.png';
+        $url = $h->app('ssl').'://'.$h->custom('url').'/resource/show/'.$id;
+        $picurl = $h->app('ssl').'://'.$h->custom('url').'/custom/image/news/resource.png';
         $arr_news = [['title'=>'资源','description'=>$body,'url'=>$url,'picurl'=>$picurl]];
         
         $w->safe = 0;
@@ -565,7 +565,7 @@ class ResourceController extends Controller
               //'self'       => 'own',
             ];
 
-        // $picurl = 'http://'.$h->custom('url').'/custom/image/news/resource.png';
+        // $picurl = $h->app('ssl').'://'.$h->custom('url').'/custom/image/news/resource.png';
         // $arr_news = [['title'=>'资源','description'=>$body,'picurl'=>$picurl]];
         
         // $w->safe = 0;
@@ -688,8 +688,8 @@ class ResourceController extends Controller
             ];
         }
 
-        $url = 'http://'.$h->custom('url').'/resource/show/'.$id;
-        $picurl = 'http://'.$h->custom('url').'/custom/image/news/resource.png';
+        $url = $h->app('ssl').'://'.$h->custom('url').'/resource/show/'.$id;
+        $picurl = $h->app('ssl').'://'.$h->custom('url').'/custom/image/news/resource.png';
         $arr_news = [['title'=>'资源','description'=>$body,'url'=>$url,'picurl'=>$picurl]];
         
         $w->safe = 0;
