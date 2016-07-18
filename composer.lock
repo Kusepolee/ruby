@@ -2034,12 +2034,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/restrose/FooWeChat.git",
-                "reference": "b1b83693fbf906fa873bf789a30759eebd25cbe0"
+                "reference": "06f2c3979fb8c7f0e8c46c8a177bc9f54a7c787d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/restrose/FooWeChat/b1b83693fbf906fa873bf789a30759eebd25cbe0.zip",
-                "reference": "b1b83693fbf906fa873bf789a30759eebd25cbe0",
+                "url": "https://packagist.phpcomposer.com/files/restrose/FooWeChat/06f2c3979fb8c7f0e8c46c8a177bc9f54a7c787d.zip",
+                "reference": "06f2c3979fb8c7f0e8c46c8a177bc9f54a7c787d",
                 "shasum": ""
             },
             "require": {
@@ -2071,7 +2071,7 @@
                 "wechat",
                 "weixin"
             ],
-            "time": "2016-07-08 01:36:33"
+            "time": "2016-07-18 01:57:59"
         },
         {
             "name": "simplesoftwareio/simple-qrcode",
@@ -3603,16 +3603,16 @@
         },
         {
             "name": "phpspec/phpspec",
-            "version": "2.5.0",
+            "version": "2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/phpspec.git",
-                "reference": "385ecb015e97c13818074f1517928b24d4a26067"
+                "reference": "531d00ee76e9ae98279ed4dbb2419e5e0f7fb82d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/phpspec/zipball/385ecb015e97c13818074f1517928b24d4a26067",
-                "reference": "385ecb015e97c13818074f1517928b24d4a26067",
+                "url": "https://packagist.phpcomposer.com/files/phpspec/phpspec/531d00ee76e9ae98279ed4dbb2419e5e0f7fb82d.zip",
+                "reference": "531d00ee76e9ae98279ed4dbb2419e5e0f7fb82d",
                 "shasum": ""
             },
             "require": {
@@ -3630,7 +3630,7 @@
             },
             "require-dev": {
                 "behat/behat": "^3.0.11",
-                "bossa/phpspec2-expect": "~1.0",
+                "ciaranmcnulty/versionbasedtestskipper": "^0.2.1",
                 "phpunit/phpunit": "~4.4",
                 "symfony/filesystem": "~2.1|~3.0"
             },
@@ -3643,7 +3643,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2.x-dev"
+                    "dev-master": "2.5.x-dev"
                 }
             },
             "autoload": {
@@ -3677,7 +3677,7 @@
                 "testing",
                 "tests"
             ],
-            "time": "2016-03-20 20:34:32"
+            "time": "2016-07-16 08:34:07"
         },
         {
             "name": "phpspec/prophecy",
