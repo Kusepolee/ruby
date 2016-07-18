@@ -95,8 +95,8 @@ class PanelController extends Controller
                 break;
         }
         
-        $url = 'http://'.$h->custom('url').'/panel/complaints/show/'.$id;
-        $picurl = 'http://'.$h->custom('url').'/custom/image/news/advice.png';
+        $url = $h->app('ssl').'://'.$h->custom('url').'/panel/complaints/show/'.$id;
+        $picurl = $h->app('ssl').'://'.$h->custom('url').'/custom/image/news/advice.png';
         $arr_news = [['title'=>'投诉建议','description'=>$body,'url'=>$url,'picurl'=>$picurl]];
         
         $w->safe = 0;
