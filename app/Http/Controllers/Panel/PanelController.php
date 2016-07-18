@@ -79,7 +79,7 @@ class PanelController extends Controller
                 break;
             case 6:
                 $array = [
-              'user'       => '8|6',//8|6|2
+              'user'       => '8|5',//8|6|2
               // 'department' => '资源部',
               // 'seek'       => '>=:经理@运营部',
               'self'       => 'own',
