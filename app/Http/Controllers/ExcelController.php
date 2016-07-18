@@ -218,8 +218,9 @@ class ExcelController extends Controller
                         })
                         ->orderBy('tran_date', 'desc')
                         ->leftjoin('members as a', 'finance_trans.tran_from', '=', 'a.id')
+                        ->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
                         ->leftjoin('config', 'finance_trans.tran_type', '=', 'config.id')
-                        ->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType')
+                        ->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType', 'c.name as toName')
                         ->get();
 
         $data_array1 = [['编号', '经手人', '金额', '日期', '支出项', '单据', '相关业务']];       
@@ -246,7 +247,7 @@ class ExcelController extends Controller
                 $tmp_array = [];
                 $tmp_array[] = $tran->tran_id;
                 $tmp_array[] = $tran->tran_amount;
-                $tmp_array[] = $tran->fromName.' --> '.$tran->tran_to;
+                $tmp_array[] = $tran->fromName.' --> '.$tran->toName;
                 $tmp_array[] = $tran->tran_date;
                 $tmp_array[] = $tran->tranType;
                 $tmp_array[] = $tran->tran_item;
