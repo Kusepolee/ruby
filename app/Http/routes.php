@@ -31,6 +31,9 @@ Route::get('/logout', 'MemberController@logout');
 //Github Webhooks
 Route::any('/webhook/payload', 'WebhookController@GithubWebhook');
 
+//微信回调模式
+Route::any('webhook/wechat', 'WebhookController@wechat');
+
 /*
 |--------------------------------------------------------------------------
 | 中间件1: wechat_or_login 功能: 使用微信,或者登录
@@ -133,13 +136,14 @@ Route::post('/upload_test', 'OaController@test');
 
 
 Route::get('/test', function () {
-	$user = 'kris';
+	// $user = 'kris';
 
-	Mail::send('welcome', ['user' => $user], function ($m) use ($user) {
-            $m->from('note@mail.henjou.com', '恒久滚塑');
-
-            $m->to('7569300@qq.com', 'kris Ni')->subject('自动通知系统');
-    });
+	// Mail::send('welcome', ['user' => $user], function ($m) use ($user) {
+ //            $m->from('note@mail.henjou.com', '恒久滚塑');
+ //            $m->to('7569300@qq.com', 'kris Ni')->subject('自动通知系统');
+ //    });
+	$w = new FooWeChat\Core\WeChatAPI;
+	$w->getSignature('http://218.93.233.222/test');
 });
 
 Route::get('/test1', function () {
