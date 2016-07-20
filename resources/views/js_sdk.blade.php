@@ -3,6 +3,8 @@ $w = new FooWeChat\Core\WeChatAPI;
 $h = new FooWeChat\Helpers\Helper;
 
 $wechat_url = $h->app('ssl')."://res.wx.qq.com/open/js/jweixin-1.1.0.js";
+
+Session::has('deviceid') ? $deviceid = Session::get('deviceid') : deviceid = 'nv';
 ?>
 @extends('head')
 @section('content')
@@ -30,7 +32,7 @@ $wechat_url = $h->app('ssl')."://res.wx.qq.com/open/js/jweixin-1.1.0.js";
 
 		        //alert(latitude+'/'+longitude);
 		        var id = <?php echo Session::get('id'); ?>;
-		        var deviceid = <?php echo Session::has('deviceid') ? Session::get('deviceid') : 'null'; ?>;
+		        var deviceid = <?php echo $deviceid ?>;
 
 		        alert(id + '/' + deviceid);
 		    }
