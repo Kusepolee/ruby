@@ -3,7 +3,7 @@ $w = new FooWeChat\Core\WeChatAPI;
 ?>
 @extends('head')
 @section('content')
-<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" ></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.1.0.js" type="text/javascript" ></script>
 
 <a href="javascript:close();">关闭窗口</a><br/><br/>
 <a href="javascript:alert();">测试</a>
