@@ -1,9 +1,12 @@
 <?php
 $w = new FooWeChat\Core\WeChatAPI;
+$h = new FooWeChat\Helpers\Helper;
+
+$wechat_url = $h->app('ssl')."://res.wx.qq.com/open/js/jweixin-1.1.0.js";
 ?>
 @extends('head')
 @section('content')
-<script src="https://res.wx.qq.com/open/js/jweixin-1.1.0.js" type="text/javascript" ></script>
+<script src={{ $wechat_url }} type="text/javascript" ></script>
 
 <a href="javascript:close();">关闭窗口</a><br/><br/>
 <a href="javascript:alert();">测试</a>
@@ -14,9 +17,5 @@ $w = new FooWeChat\Core\WeChatAPI;
     	wx.closeWindow();
     }
 
-    function alert()
-    {
-    	alert('fuck');
-    }
 </script>
 @endsection
