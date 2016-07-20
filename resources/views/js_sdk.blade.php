@@ -28,7 +28,11 @@ $wechat_url = $h->app('ssl')."://res.wx.qq.com/open/js/jweixin-1.1.0.js";
 		        var speed = res.speed; // 速度，以米/每秒计
 		        var accuracy = res.accuracy; // 位置精度
 
-		        alert(latitude+'/'+longitude);
+		        //alert(latitude+'/'+longitude);
+		        var id = <?php echo Session::get('id'); ?>;
+		        var deviceid = <?php echo Session::get('id'); ?>;
+
+		        alert(id +'/'+deviceid);
 		    }
 		});
     }
