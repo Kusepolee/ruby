@@ -30,7 +30,7 @@ $wechat_url = $h->app('ssl')."://res.wx.qq.com/open/js/jweixin-1.1.0.js";
 
 		        //alert(latitude+'/'+longitude);
 		        var id = <?php echo Session::get('id'); ?>;
-		        var deviceid = <?php echo Session::get('id'); ?>;
+		        var deviceid = <?php echo Session::get('deviceid'); ?>;
 
 		        alert(id +'/'+deviceid);
 		    }
