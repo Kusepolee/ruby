@@ -140,15 +140,8 @@ Route::post('/upload_test', 'OaController@test');
 
 
 Route::get('/test', function () {
-	return view('js_sdk');
-	// $user = 'kris';
-
-	// Mail::send('welcome', ['user' => $user], function ($m) use ($user) {
- //            $m->from('note@mail.henjou.com', '恒久滚塑');
- //            $m->to('7569300@qq.com', 'kris Ni')->subject('自动通知系统');
- //    });
-	// $w = new FooWeChat\Core\WeChatAPI;
-	// $w->getSignature('http://218.93.233.222/test');
+	$arr = ['color'=>'success', 'type'=>'5','code'=>'5.1', 'btn'=>'关闭', 'link'=>'javascript:close();'];
+        return view('note',$arr);
 });
 
 Route::get('/test1', function () {
