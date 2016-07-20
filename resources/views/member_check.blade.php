@@ -24,15 +24,12 @@ Session::has('deviceid') ? $deviceid = Session::get('deviceid') : $deviceid = 'N
     <div class="col-md-4 col-sm-4" id="excel_div">
     	<div class="panel panel-success">
         <div class="panel-heading">
-            <i class="glyphicon glyphicon-th"></i>&nbsp&nbspExcel
+            <i class="glyphicon glyphicon-th"></i>&nbsp&nbsp考勤和加班
         </div>
         <div class="panel-body">
           <span id="info_txt"></span>
           <blockquote>
-            <small>本系统将使用您的位置信息, 为保护隐私请在位于公司的公共范围内使用.</small>
-          </blockquote>
-            <blockquote>
-            <small>若不使用微信系统打卡, 可以使用公司指纹考勤机, 但尽量避免交叉使用, 若有交叉使用情况将由人工核实登记, 经常性需人工核实的视同工作失职, 浪费人工费将从工资中扣除</small>
+            <small>本系统将使用您的位置信息. 若不使用微信系统打卡, 可以使用公司指纹考勤机, 但尽量避免交叉使用. 若有交叉使用情况将由人工核实登记, 经常性需人工核实的视同工作失职, 浪费人工费将从工资中扣除</small>
           </blockquote>
         </div>
         <div class="panel-footer">
