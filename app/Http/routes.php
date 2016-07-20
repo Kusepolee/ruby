@@ -122,6 +122,8 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::get('/panel/complaints/record', 'Panel\PanelController@complaintsRecord');
 	Route::get('/panel/complaints/show/{id}', 'Panel\PanelController@complaintsShow');
 
+	Route::get('/panel/check', 'Panel\PanelController@check');
+
 });
 
 
@@ -136,24 +138,20 @@ Route::post('/upload_test', 'OaController@test');
 
 
 Route::get('/test', function () {
+	return view('js_sdk');
 	// $user = 'kris';
 
 	// Mail::send('welcome', ['user' => $user], function ($m) use ($user) {
  //            $m->from('note@mail.henjou.com', '恒久滚塑');
  //            $m->to('7569300@qq.com', 'kris Ni')->subject('自动通知系统');
  //    });
-	$w = new FooWeChat\Core\WeChatAPI;
-	$w->getSignature('http://218.93.233.222/test');
+	// $w = new FooWeChat\Core\WeChatAPI;
+	// $w->getSignature('http://218.93.233.222/test');
 });
 
 Route::get('/test1', function () {
 	//return redirect('/panel');
-	$a = new FooWeChat\Authorize\Auth;
-	if($a->auth(['position' => '=总监', 'department' => '=运营部'])){
-		echo "ok";
-	}else{
-		echo "string";
-	}
+	phpinfo();
 
 });
 

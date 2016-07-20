@@ -265,4 +265,26 @@ class PanelController extends Controller
         return view('panel.complaints_show', ['rec'=>$rec, 'user_name'=>$user_name, 'dp'=>$dp, 'img'=>$img]);
         
     }
+
+    public function check()
+    {
+      return view('js_sdk');
+    }
+
+    /**
+    * others
+    */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

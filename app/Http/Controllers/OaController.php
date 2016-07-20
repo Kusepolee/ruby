@@ -98,14 +98,8 @@ class OaController extends Controller
         return redirect($url);
     }
 
-    public function test()
-    {
-
-        $file = Input::file('pic');
-        $image = $file->getRealPath();
-
-        Image::make($image)->save('upload/advice/foo.jpg');
-    }
-
-
+    /**
+    * other functions
+    *
+    */
 }
