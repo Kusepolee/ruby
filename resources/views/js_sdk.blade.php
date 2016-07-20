@@ -4,7 +4,7 @@ $h = new FooWeChat\Helpers\Helper;
 
 $wechat_url = $h->app('ssl')."://res.wx.qq.com/open/js/jweixin-1.1.0.js";
 
-Session::has('deviceid') ? $deviceid = Session::get('deviceid') : deviceid = 'nv';
+Session::has('deviceid') ? $deviceid = Session::get('deviceid') : $deviceid = 'nv';
 ?>
 @extends('head')
 @section('content')
