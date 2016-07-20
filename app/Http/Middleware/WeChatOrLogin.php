@@ -34,12 +34,14 @@ class WeChatOrLogin
         }else if(Cookie::get('id') && Session::has('id') === false){
 
             $id = Cookie::get('id');
+            Cookie::has('deviceid') ? $deviceid = Cookie::get('deviceid') : $deviceid = '';
             $rec = Member::find($id);
 
             if(count($rec)){
 
                 if(!Session::has('id')) Session::put('id', $rec->id);
                 if(!Session::has('name')) Session::put('name', $rec->name);
+                if(!Session::has('deviceid')) Session::put('deviceid', $deviceid);
 
                 return $next($request);
 
