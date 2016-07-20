@@ -10,11 +10,10 @@ $code = $error[1];
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
 <title>{{ $type or 'title' }}</title>
-   <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-   <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
-   <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-      <link href="{{ URL::asset('asset/css/style.css') }}" rel="stylesheet" type="text/css" />
-   <link href="css/font-awesome.css" rel="stylesheet" />
+   <link rel="stylesheet" type="text/css" href="{{ URL::asset('bower_components/bootstrap/dist/css/bootstrap.min.css') }}" >
+   <link href="{{ URL::asset('custom/css/style.css') }}" rel="stylesheet" type="text/css" >
+   <script src="{{ URL::asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
+   <script src="{{ URL::asset('bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 
 </head>
 
