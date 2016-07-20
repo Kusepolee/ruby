@@ -769,6 +769,16 @@ class MemberController extends Controller
     }
 
     /**
+    * 考勤加班
+    *
+    */
+    public function check(Request $request)
+    {
+       $all = $request->all();
+       print_r($all);
+    }
+
+    /**
     * other functions
     *
     */

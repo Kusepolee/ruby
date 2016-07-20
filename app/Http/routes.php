@@ -70,6 +70,8 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::get('/member/password/form', 'MemberController@passwordForm');
 	Route::get('/member/image/set', 'MemberController@image');
 	Route::post('/member/image/store/{id?}', 'MemberController@imageStore');
+	//考勤加班
+	Route::post('/member/check', 'MemberController@check');
 
 	//OA
 	Route::get('/oa/qrcode/{id?}', 'OaController@qrcode');
