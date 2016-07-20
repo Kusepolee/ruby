@@ -13,5 +13,6 @@ $w = new FooWeChat\Core\WeChatAPI;
 </script>
 @section('content')
 
-<a href="javascript:close();">关闭窗口</a>
+<a href="javascript:close();">关闭窗口</a><br/><br/>
+<a href="javascript:alert();">测试</a>
 @endsection
