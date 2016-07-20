@@ -8,8 +8,8 @@ $wechat_url = $h->app('ssl')."://res.wx.qq.com/open/js/jweixin-1.1.0.js";
 @section('content')
 <script src={{ $wechat_url }} type="text/javascript" ></script>
 
-<a href="javascript:close();">关闭窗口</a><br/><br/>
-<a href="javascript:locate();">位置</a><br/><br/>
+<a href="javascript:close();" btn btn-default>关闭窗口</a><br/><br/>
+<a href="javascript:locate();" class="btn btn-default">位置</a><br/><br/>
 <script type="text/javascript" >
     wx.config(<?php echo $w->getSignature(false,['closeWindow', 'scanQRCode', 'getLocation']); ?>);
     
