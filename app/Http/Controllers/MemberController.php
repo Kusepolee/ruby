@@ -794,7 +794,8 @@ class MemberController extends Controller
     {
         $input = $request->all();
         MemberCheck::create($input);
-        return 'ok';
+        $arr = ['color'=>'success', 'type'=>'5','code'=>'5.1', 'btn'=>'关闭', 'link'=>'javascript:close();'];
+        return view('note',$arr);
     }
 
     /**
