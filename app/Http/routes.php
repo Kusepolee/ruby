@@ -71,7 +71,7 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::get('/member/image/set', 'MemberController@image');
 	Route::post('/member/image/store/{id?}', 'MemberController@imageStore');
 	//考勤加班
-	Route::post('/member/check', 'MemberController@check');
+	Route::post('/member/check/store', 'MemberController@checkStore');
 
 	//OA
 	Route::get('/oa/qrcode/{id?}', 'OaController@qrcode');
@@ -124,7 +124,7 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::get('/panel/complaints/record', 'Panel\PanelController@complaintsRecord');
 	Route::get('/panel/complaints/show/{id}', 'Panel\PanelController@complaintsShow');
 
-	Route::get('/panel/check', 'Panel\PanelController@check');
+	Route::get('/panel/member/check', 'MemberController@check');
 
 });
 

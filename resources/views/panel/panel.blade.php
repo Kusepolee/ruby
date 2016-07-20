@@ -38,7 +38,7 @@
 
     {{-- check --}}
     <div class="col-md-2 col-sm-4 col-xs-4  wel-grid text-center">
-        <div class="btm-clr"><a href="panel/check">
+        <div class="btm-clr"><a href="panel/member/check">
             <figure id="tubiao2" class="icon">
                 <span class="tubiao yanse2 glyphicon glyphicon-barcode" aria-hidden="true"></span>
             </figure></a>

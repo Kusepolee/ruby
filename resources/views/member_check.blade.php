@@ -14,7 +14,7 @@ Session::has('deviceid') ? $deviceid = Session::get('deviceid') : $deviceid = 'N
 <a href="javascript:close();" btn btn-default>关闭窗口</a><br/><br/>
 <a href="javascript:locate();" class="btn btn-default">位置</a><br/><br/>
 
-{!! Form::open(['url'=>'member/check', 'role' => 'form', 'id' =>'locate']) !!}
+{!! Form::open(['url'=>'member/check/store', 'role' => 'form', 'id' =>'locate']) !!}
 {!! Form::hidden('id', $id) !!}
 {!! Form::hidden('deviceid', $deviceid) !!}
 {!! Form::hidden('latitude', null, ['id'=>'latitude']) !!}

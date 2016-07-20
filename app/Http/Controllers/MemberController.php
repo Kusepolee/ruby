@@ -772,10 +772,27 @@ class MemberController extends Controller
     * 考勤加班
     *
     */
-    public function check(Request $request)
+    public function check()
     {
-       $all = $request->all();
-       print_r($all);
+        $arr = ['way'=>'wechat'];
+
+        $a = new Auth;
+        if(!$a->auth($arr)){
+            return view('40x',['color'=>'warning', 'type'=>'2', 'code'=>'2.3']);
+            exit;
+        }
+        // ^ 身份验证
+        return view('member_check');
+    }
+
+    /**
+    * 储存考勤加班信息
+    *
+    */
+    public function checkStore(Request $request)
+    {
+        $all = $request->all();
+        print_r($all);
     }
 
     /**
