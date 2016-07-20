@@ -792,7 +792,8 @@ class MemberController extends Controller
     */
     public function checkStore(Request $request)
     {
-        MemberCheck::create($request->all());
+        $input = $request->all();
+        MemberCheck::create($input);
         return 'ok';
     }
 
