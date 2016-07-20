@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Member;
+use APp\MemberCheck;
 use App\Position;
 use App\Department;
 use Config;
@@ -791,8 +792,8 @@ class MemberController extends Controller
     */
     public function checkStore(Request $request)
     {
-        $all = $request->all();
-        print_r($all);
+        MemberCheck::create($request->all());
+        return 'ok';
     }
 
     /**
