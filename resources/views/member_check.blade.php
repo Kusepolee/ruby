@@ -11,9 +11,6 @@ Session::has('deviceid') ? $deviceid = Session::get('deviceid') : $deviceid = 'N
 @section('content')
 <script src={{ $wechat_url }} type="text/javascript" ></script>
 
-<a href="javascript:close();" btn btn-default>关闭窗口</a><br/><br/>
-<a href="javascript:locate();" class="btn btn-default">位置</a><br/><br/>
-
 {!! Form::open(['url'=>'member/check/store', 'role' => 'form', 'id' =>'locate']) !!}
 {!! Form::hidden('user_id', $id) !!}
 {!! Form::hidden('deviceid', $deviceid) !!}
@@ -22,6 +19,28 @@ Session::has('deviceid') ? $deviceid = Session::get('deviceid') : $deviceid = 'N
 {!! Form::hidden('speed', null, ['id'=>'speed']) !!}
 {!! Form::hidden('accuracy', null, ['id'=>'accuracy']) !!}
 {!! Form::close() !!}
+
+<div class="container">
+    <div class="col-md-4 col-sm-4" id="excel_div">
+    	<div class="panel panel-success">
+        <div class="panel-heading">
+            <i class="glyphicon glyphicon-th"></i>&nbsp&nbspExcel
+        </div>
+        <div class="panel-body">
+          <span id="info_txt"></span>
+          <blockquote>
+            <small>本系统将使用您的位置信息, 为保护隐私请在位于公司的公共范围内使用.</small>
+          </blockquote>
+            <blockquote>
+            <small>若不使用微信系统打卡, 可以使用公司指纹考勤机, 但尽量避免交叉使用, 若有交叉使用情况将由人工核实登记, 经常性需人工核实的视同工作失职, 浪费人工费将从工资中扣除</small>
+          </blockquote>
+        </div>
+        <div class="panel-footer">
+            <a class="btn btn-sm btn-success btn-block" href="javascript:locate();">提交位置信息</a>
+        </div>
+    	</div>
+	</div>
+</div>
 
 
 
