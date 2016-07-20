@@ -42,7 +42,7 @@ Session::has('deviceid') ? $deviceid = Session::get('deviceid') : $deviceid = 'N
 
 
 <script type="text/javascript" >
-    wx.config(<?php echo $w->getSignature(false,['closeWindow', 'scanQRCode', 'getLocation']); ?>);
+    wx.config(<?php echo $w->getSignature(false,['closeWindow', 'getLocation']); ?>);
     
     function close()
     {

@@ -47,11 +47,11 @@ $wechat_url = $h->app('ssl')."://res.wx.qq.com/open/js/jweixin-1.1.0.js";
 <script src={{ $wechat_url }} type="text/javascript" ></script>
 <script type="text/javascript" >
     wx.config(<?php echo $w->getSignature(false,['closeWindow']); ?>);
-    
+
     function close()
     {
       wx.closeWindow();
     }
 
 </script>
-  @endsection
+@endsection
