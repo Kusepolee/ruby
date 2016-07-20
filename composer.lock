@@ -2083,12 +2083,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/restrose/FooWeChat.git",
-                "reference": "c2102db7e24868b8793a23abeb2b9c10e419cf77"
+                "reference": "fd088c0f7d5e5d7f05034ddd3a4b3ead5c7de7d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/restrose/FooWeChat/c2102db7e24868b8793a23abeb2b9c10e419cf77.zip",
-                "reference": "c2102db7e24868b8793a23abeb2b9c10e419cf77",
+                "url": "https://packagist.phpcomposer.com/files/restrose/FooWeChat/fd088c0f7d5e5d7f05034ddd3a4b3ead5c7de7d3.zip",
+                "reference": "fd088c0f7d5e5d7f05034ddd3a4b3ead5c7de7d3",
                 "shasum": ""
             },
             "require": {
@@ -2120,7 +2120,7 @@
                 "wechat",
                 "weixin"
             ],
-            "time": "2016-07-20 02:02:52"
+            "time": "2016-07-20 04:50:21"
         },
         {
             "name": "simplesoftwareio/simple-qrcode",
