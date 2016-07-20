@@ -141,7 +141,7 @@ Route::post('/upload_test', 'OaController@test');
 
 Route::get('/test', function () {
 	$arr = ['color'=>'success', 'type'=>'5','code'=>'5.1', 'btn'=>'关闭', 'link'=>'javascript:close();'];
-        return view('note',$arr);
+    return view('note',$arr);
 });
 
 Route::get('/test1', function () {
