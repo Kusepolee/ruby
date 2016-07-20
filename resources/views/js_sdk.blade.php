@@ -36,7 +36,11 @@ echo $deviceid;
 		        var id = <?php echo Session::get('id'); ?>;
 		        var deviceid = <?php echo $deviceid ?>;
 
-		        alert(id + '/' + deviceid);
+		        var array;
+		        array[] = id;
+		        array[] = deviceid;
+
+		        print(array);
 		    }
 		});
     }
