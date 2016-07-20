@@ -10,6 +10,11 @@ $w = new FooWeChat\Core\WeChatAPI;
     {
     	wx.closeWindow();
     }
+
+    function alert()
+    {
+    	alert('fuck');
+    }
 </script>
 @section('content')
 
