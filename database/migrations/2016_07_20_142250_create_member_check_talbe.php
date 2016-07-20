@@ -15,6 +15,7 @@ class CreateMemberCheckTalbe extends Migration
         Schema::create('member_check', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
+            $table->string('deviceid');
             $table->decimal('latitude', 30, 20);
             $table->decimal('longitude', 30, 20);
             $table->decimal('speed', 15, 5);
