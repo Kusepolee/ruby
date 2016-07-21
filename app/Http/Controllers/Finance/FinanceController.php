@@ -157,7 +157,7 @@ class FinanceController extends Controller
 	{
 		$input = $request->all();
 		
-		FinanceOuts::create($input);
+		$id = FinanceOuts::create($input)->id;
 
 		//微信通知		
 		$s = new Select;
@@ -174,7 +174,7 @@ class FinanceController extends Controller
               'self'       => 'own',
             ];
         
-        $url = $h->app('ssl').'://'.$h->custom('url').'/finance';
+        $url = $h->app('ssl').'://'.$h->custom('url').'/finance/outs/show/'.$id;
         $picurl = $h->app('ssl').'://'.$h->custom('url').'/custom/image/news/finance.png';
         $arr_news = [['title'=>'财务','description'=>$body,'url'=>$url,'picurl'=>$picurl]];
         
@@ -212,8 +212,6 @@ class FinanceController extends Controller
         if($request->f_or_t != 1){
 			$input['tran_from'] = $request->S_id;
 			$input['tran_to'] = $request->M_id;
-			
-			$id = Financetrans::create($input)->id;
 
 	        $body = '[资金流向]'.$request->S_name.' -> '.$request->M_name.' : ¥ '.floatval($request->tran_amount).' 用途: '.$request->tran_item;
 
@@ -221,12 +219,11 @@ class FinanceController extends Controller
 			$input['tran_from'] = $request->M_id;
 			$input['tran_to'] = $request->S_id;
 			
-			$id = Financetrans::create($input)->id;
-
 	        $body = '[资金流向]'.$request->M_name.' -> '.$request->S_name.' : ¥ '.floatval($request->tran_amount).' 用途: '.$request->tran_item;
 
         }
 
+        $id = Financetrans::create($input)->id;
         $work_id = $request->M_work_id;
 
 	        $array_1 = [
