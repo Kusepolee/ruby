@@ -197,39 +197,39 @@ class ExcelController extends Controller
         $seek_array = explode('-',$seek_string);
 
         $seek_array[0] != '_not' ? $this->seekDpArray = explode("|", $seek_array[0]) : $this->seekDpArray = [];   
-        $seek_array[1] != '_not' ? $this->seekName = $seek_array[1] : $this->seekName = '';    
+        $seek_array[1] != '_not' ? $this->seekNameArray = explode("|", $seek_array[1]) : $this->seekNameArray = [];    
 
         $outs = FinanceOuts::where(function ($query) { 
-                            if(count($this->seekDpArray)) $query->whereIn('finance_outs.out_about', $this->seekDpArray);
-                            if ($this->seekName != '' && $this->seekName != null) {
-                                $query->where('finance_outs.out_user', 'LIKE', '%'.$this->seekName.'%');
-                            }
-                        })
-                        ->orderBy('out_date', 'desc')
-                        ->leftjoin('departments', 'finance_outs.out_about', '=', 'departments.id')
-                        ->leftjoin('config', 'finance_outs.out_bill', '=', 'config.id')
-                        ->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName')
-                        ->get();
-
-        $trans = FinanceTrans::where(function ($query) { 
-                            if ($this->seekName != '' && $this->seekName != null) {
-                                $query->where('finance_trans.tran_to', 'LIKE', '%'.$this->seekName.'%');
-                            }
-                        })
-                        ->orderBy('tran_date', 'desc')
-                        ->leftjoin('members as a', 'finance_trans.tran_from', '=', 'a.id')
-                        ->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
-                        ->leftjoin('config', 'finance_trans.tran_type', '=', 'config.id')
-                        ->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType', 'c.name as toName')
-                        ->get();
+                                if(count($this->seekDpArray)) $query->whereIn('finance_outs.out_about', $this->seekDpArray);
+                                if(count($this->seekNameArray)) $query->whereIn('finance_outs.out_user', $this->seekNameArray);
+                            })
+                            ->orderBy('out_date', 'desc')
+                            ->orderBy('created_at', 'desc')
+                            ->leftjoin('departments', 'finance_outs.out_about', '=', 'departments.id')
+                            ->leftjoin('config', 'finance_outs.out_bill', '=', 'config.id')
+                            ->leftjoin('members as a', 'finance_outs.out_user', '=', 'a.id')
+                            ->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName', 'a.name as userName')
+                            ->get();
+            $trans = FinanceTrans::where(function ($query) { 
+                                if(count($this->seekNameArray)) $query->whereIn('finance_trans.tran_from', $this->seekNameArray)
+                                                                    ->orwhereIn('finance_trans.tran_to', $this->seekNameArray);
+                            })
+                            ->orderBy('tran_date', 'desc')
+                            ->orderBy('created_at', 'desc')
+                            ->leftjoin('members as a', 'finance_trans.tran_from', '=', 'a.id')
+                            ->leftjoin('members as b', 'finance_trans.createdBy', '=', 'b.id')
+                            ->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
+                            ->leftjoin('config', 'finance_trans.tran_type', '=', 'config.id')
+                            ->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType', 'b.name as createdByName', 'c.name as toName')
+                            ->get();
 
         $data_array1 = [['编号', '经手人', '金额', '日期', '支出项', '单据', '相关业务']];       
 
         if(count($outs)){
             foreach ($outs as $out) {
                 $tmp_array = [];
-                $tmp_array[] = $out->out_id;
-                $tmp_array[] = $out->out_user;
+                $tmp_array[] = $out->id;
+                $tmp_array[] = $out->userName;
                 $tmp_array[] = $out->out_amount;
                 $tmp_array[] = $out->out_date;
                 $tmp_array[] = $out->out_item;
@@ -245,7 +245,7 @@ class ExcelController extends Controller
         if(count($trans)){
             foreach ($trans as $tran) {
                 $tmp_array = [];
-                $tmp_array[] = $tran->tran_id;
+                $tmp_array[] = $tran->id;
                 $tmp_array[] = $tran->tran_amount;
                 $tmp_array[] = $tran->fromName.' --> '.$tran->toName;
                 $tmp_array[] = $tran->tran_date;

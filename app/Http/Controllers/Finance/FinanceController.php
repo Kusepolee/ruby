@@ -18,7 +18,7 @@ use FooWeChat\Selector\Select;
 class FinanceController extends Controller
 {
 	protected $seekDpArray;
-	protected $seekName;
+	protected $seekNameArray;
 
 	/*
 	 *财务首页
@@ -31,21 +31,21 @@ class FinanceController extends Controller
 		if($a->auth(['admin'=>'no', 'position'=>'>=总监', 'department'=>'>=运营部|资源部'])){
 			$outs = FinanceOuts::where(function ($query) { 
 	                            if(count($this->seekDpArray)) $query->whereIn('finance_outs.out_about', $this->seekDpArray);
-	                            if ($this->seekName != '' && $this->seekName != null) {
-	                                $query->where('finance_outs.out_user', 'LIKE', '%'.$this->seekName.'%');
-	                            }
+	                            if(count($this->seekNameArray)) $query->whereIn('finance_outs.out_user', $this->seekNameArray);
 	                        })
 							->orderBy('out_date', 'desc')
+							->orderBy('created_at', 'desc')
 							->leftjoin('departments', 'finance_outs.out_about', '=', 'departments.id')
 							->leftjoin('config', 'finance_outs.out_bill', '=', 'config.id')
-							->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName')
+							->leftjoin('members as a', 'finance_outs.out_user', '=', 'a.id')
+							->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName', 'a.name as userName')
 							->paginate(30);
 			$trans = FinanceTrans::where(function ($query) { 
-	                            if ($this->seekName != '' && $this->seekName != null) {
-	                                $query->where('finance_trans.tran_to', 'LIKE', '%'.$this->seekName.'%');
-	                            }
+	                            if(count($this->seekNameArray)) $query->whereIn('finance_trans.tran_from', $this->seekNameArray)
+	                            									->orwhereIn('finance_trans.tran_to', $this->seekNameArray);
 	                        })
 							->orderBy('tran_date', 'desc')
+							->orderBy('created_at', 'desc')
 							->leftjoin('members as a', 'finance_trans.tran_from', '=', 'a.id')
 							->leftjoin('members as b', 'finance_trans.createdBy', '=', 'b.id')
 							->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
@@ -61,28 +61,28 @@ class FinanceController extends Controller
 			$user = Session::get('name');
 			$outs = FinanceOuts::where(function ($query) { 
 	                            if(count($this->seekDpArray)) $query->whereIn('finance_outs.out_about', $this->seekDpArray);
-	                            if ($this->seekName != '' && $this->seekName != null) {
-	                                $query->where('finance_outs.out_user', 'LIKE', '%'.$this->seekName.'%');
-	                            }
+	                            if(count($this->seekNameArray)) $query->whereIn('finance_outs.out_user', $this->seekNameArray);
 	                        })
 							->where('out_about', $user_dp)
 							->orderBy('out_date', 'desc')
+							->orderBy('created_at', 'desc')
 							->leftjoin('departments', 'finance_outs.out_about', '=', 'departments.id')
 							->leftjoin('config', 'finance_outs.out_bill', '=', 'config.id')
-							->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName')
+							->leftjoin('members as a', 'finance_outs.out_user', '=', 'a.id')
+							->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName', 'a.name as userName')
 							->paginate(30);				
 			$recs = Member::where('department', $user_dp)->get();
 			foreach ($recs as $rec) {
 				$name = $rec->name;
 			}
 			$trans = FinanceTrans::where(function ($query) { 
-	                            if ($this->seekName != '' && $this->seekName != null) {
-	                                $query->where('finance_trans.tran_to', 'LIKE', '%'.$this->seekName.'%');
-	                            }
+	                            if(count($this->seekNameArray)) $query->whereIn('finance_trans.tran_from', $this->seekNameArray)
+	                            									->orwhereIn('finance_trans.tran_to', $this->seekNameArray);
 	                        })
 							->whereIn('tran_to', [$name, $id])
 							->orwhere('tran_from', $id)
 							->orderBy('tran_date', 'desc')
+							->orderBy('created_at', 'desc')
 							->leftjoin('members as a', 'finance_trans.tran_from', '=', 'a.id')
 							->leftjoin('members as b', 'finance_trans.createdBy', '=', 'b.id')
 							->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
@@ -91,18 +91,19 @@ class FinanceController extends Controller
 							->paginate(30);
 
 		}else{
-
-			$members = Session::get('name');
 			$id = Session::get('id');
-			$outs = FinanceOuts::where('out_user', $members)
+			$outs = FinanceOuts::where('out_user', $id)
 							->orderBy('out_date', 'desc')
+							->orderBy('created_at', 'desc')
 							->leftjoin('departments', 'finance_outs.out_about', '=', 'departments.id')
 							->leftjoin('config', 'finance_outs.out_bill', '=', 'config.id')
-							->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName')
+							->leftjoin('members as a', 'finance_outs.out_user', '=', 'a.id')
+							->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName', 'a.name as userName')
 							->paginate(30);
 			$trans = FinanceTrans::where('tran_to', $id)
 							->orwhere('tran_from', $id)
 							->orderBy('tran_date', 'desc')
+							->orderBy('created_at', 'desc')
 							->leftjoin('members as a', 'finance_trans.tran_from', '=', 'a.id')
 							->leftjoin('members as b', 'finance_trans.createdBy', '=', 'b.id')
 							->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
@@ -111,16 +112,25 @@ class FinanceController extends Controller
 							->paginate(30);
 		}
 
-		$recs = Department::where('id', '>', 1)
+		$departments = Department::where('id', '>', 1)
 					->get();
-		if(count($recs)){
+		if(count($departments)){
 			$dp = ['0'=>'不限部门'];
-			foreach ($recs as $rec) {
-				$dp = array_add($dp, $rec->id, $rec->name);
+			foreach ($departments as $department) {
+				$dp = array_add($dp, $department->id, $department->name);
+			}
+		}
+
+		$members = Member::where('id', '>', 1)
+					->get();
+		if(count($members)){
+			$mb = ['0'=>'不限姓名'];
+			foreach ($members as $member) {
+				$mb = array_add($mb, $member->id, $member->name);
 			}
 		}
 		
-		return view('finance.finance', ['seekName'=>$this->seekName, 'seekDp'=>$this->seekDpArray, 'outs'=>$outs, 'trans'=>$trans, 'Dp'=>$dp]);
+		return view('finance.finance', ['seekName'=>$this->seekNameArray, 'seekDp'=>$this->seekDpArray, 'outs'=>$outs, 'trans'=>$trans, 'Dp'=>$dp, 'Mb'=>$mb]);
 	}
 
 	/**
@@ -128,7 +138,6 @@ class FinanceController extends Controller
 	*/
 	public function out()
 	{
-		$user = Session::get('name');
 		$recs = Department::where('id', '>', 1)
 					->get();
 		if(count($recs)){
@@ -138,7 +147,7 @@ class FinanceController extends Controller
 			}
 		}
 
-		return view('finance.finance_outs', ['user'=>$user, 'dp'=>$dp]);
+		return view('finance.finance_outs', ['dp'=>$dp]);
 	}
 
 	/**
@@ -154,8 +163,9 @@ class FinanceController extends Controller
 		$s = new Select;
         $w = new WeChatAPI;
         $h = new Helper;
+        $user = Session::get('name');
 
-        $body = '[资金支出]'.$request->out_user.' 支出: ¥ '.floatval($request->out_amount).' 用途: '.$request->out_item;
+        $body = '[资金支出]'.$user.' 支出: ¥ '.floatval($request->out_amount).' 用途: '.$request->out_item;
 
         $array = [
               'user'       => '8|6',//8|6|2
@@ -267,7 +277,8 @@ class FinanceController extends Controller
     {
     	$rec = FinanceOuts::leftjoin('departments', 'finance_outs.out_about', '=', 'departments.id')
 							->leftjoin('config', 'finance_outs.out_bill', '=', 'config.id')
-							->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName')
+							->leftjoin('members as a', 'finance_outs.out_user', '=', 'a.id')
+							->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName', 'a.name as userName')
 							->find($id);
     	return view('finance.finance_outs_show', ['rec'=>$rec]);
     }
@@ -321,7 +332,7 @@ class FinanceController extends Controller
     {
         $seek = $request->all();
 
-        if ($seek['seekDp'] == 0 && ($seek['seekName'] =='' || $seek['seekName'] == null)) {
+        if ($seek['seekDp'] == 0 && ($seek['seekName'] =='' || $seek['seekName'] == 0 && $seek['seekName'] == '')) {
             //go on
         }else{
 
@@ -329,6 +340,16 @@ class FinanceController extends Controller
                 $seekDp = $seek['seekDp'];
                 if(count($seekDp)){
                     $this->seekDpArray = [$seekDp];
+                }else{
+                    $arr = ['color'=>'info', 'type'=>'6','code'=>'6.1', 'btn'=>'返回资源管理', 'link'=>'/resource'];
+                    return view('note',$arr);
+                }
+            }
+
+            if($seek['seekName'] != 0) {
+                $seekName = $seek['seekName'];
+                if(count($seekName)){
+                    $this->seekNameArray = [$seekName];
                 }else{
                     $arr = ['color'=>'info', 'type'=>'6','code'=>'6.1', 'btn'=>'返回资源管理', 'link'=>'/resource'];
                     return view('note',$arr);

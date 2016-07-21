@@ -18,6 +18,8 @@ class CreateRulesTable extends Migration
             $table->string('content');
             $table->integer('level');
             $table->integer('order');
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }

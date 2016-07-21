@@ -19,7 +19,7 @@ use FooWeChat\Selector\Select;
 class PanelController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * 面板首页
      *
      * @return \Illuminate\Http\Response
      */
@@ -30,7 +30,7 @@ class PanelController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * 投诉建议
      *
      * @return \Illuminate\Http\Response
      */
@@ -41,7 +41,7 @@ class PanelController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 投诉存储
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -108,7 +108,7 @@ class PanelController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * 投诉图片上传
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -120,7 +120,7 @@ class PanelController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * 投诉图片存储
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -145,9 +145,8 @@ class PanelController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * 投诉记录
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -197,7 +196,7 @@ class PanelController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 投诉信息
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -264,8 +263,9 @@ class PanelController extends Controller
         }
         return view('panel.complaints_show', ['rec'=>$rec, 'user_name'=>$user_name, 'dp'=>$dp, 'img'=>$img]);        
     }
+
     /**
-     * Remove the specified resource from storage.
+     * 规章制度
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -274,6 +274,38 @@ class PanelController extends Controller
     {
         return view('panel.rules');
     }
+
+    /**
+     * 规章制度添加
+     *
+     * @param
+     * @return \Illuminate\Http\Response
+     */
+    public function rulesCreate()
+    {
+        $recs = Department::where('id', '>', 1)
+              ->get();
+        if(count($recs)){
+          $dp = [];
+          foreach ($recs as $rec) {
+            $dp = array_add($dp, $rec->id, $rec->name);
+          }
+        }
+        return view('panel.rules_create', ['dp'=>$dp]);
+    }
+
+    /**
+     * 规章制度存储
+     *
+     * @param
+     * @return \Illuminate\Http\Response
+     */
+    public function rulesStore(Requests\Complaints\RulesRequest $request)
+    {
+        
+        return view('panel.rules');
+    }
+
     /**
      * Remove the specified resource from storage.
      *

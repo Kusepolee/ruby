@@ -3,7 +3,7 @@
 	$h = new FooWeChat\Helpers\Helper;
 
     count($seekDp) ? $seekDp_string = implode("|", $seekDp) : $seekDp_string = '_not';
-    $seekName != '' && $seekName != null ? $seekName_string = $seekName : $seekName_string = '_not';
+    count($seekName) ? $seekName_string = implode("|", $seekName) : $seekName_string = '_not';
     $full_seek_string = $seekDp_string."-".$seekName_string;
 ?>
 @extends('head')
@@ -15,12 +15,12 @@
     <ol class="breadcrumb">
         <li class="active" >财务</li>
         <li><a href="/finance/outs">支出</a></li>
-        @if(count($seekDp) || ($seekName != '' && $seekName != null))
+        @if(count($seekDp) || count($seekName))
         <li><a href="/finance">重置查询条件</a></li>
         @endif
     </ol>
         <ul id="myTab" class="nav nav-tabs">
-        @if(count($seekDp) || ($seekName != '' && $seekName != null))
+        @if(count($seekDp) || count($seekName))
             <li class="active"><a href="#outs" data-toggle="tab">支出</a>
             <li class=""><a href="#trans" data-toggle="tab">流向</a>
         @else
@@ -28,7 +28,7 @@
             <li class=""><a href="#trans" data-toggle="tab">流向</a>
         @endif
             <!-- 余额 -->
-        @if ($a->auth(['admin'=>'no', 'position'=>'>=总监']))
+        @if ($a->auth(['position'=>'>=总监']))
             <li class=""><a href="#seek" data-toggle="tab">查询</a></li>
         @endif
             <li><a href="#manage" data-toggle="tab">功能</a></li>
@@ -41,10 +41,9 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>经手人</th>
-                                    <th>金额</th>
                                     <th>日期</th>
+                                    <th>金额</th>
+                                    <th>经手人</th>
                                     @if(!$a->usingWechat())                        
                                     <th>支出项</th>
                                     <th>单据</th>
@@ -55,10 +54,9 @@
                             <tbody>
                             @foreach($outs as $out)
                                 <tr>
-                                	<td>{{ $out->id }}</td>
-                                	<td>{{ $out->out_user }}</td>
-                                	<td><a href="/finance/outs/show/{{ $out->id }}" class="btn btn-sm btn-info">{{ floatval($out->out_amount) }}</td>
                                 	<td>{{ $out->out_date }}</td>
+                                	<td><a href="/finance/outs/show/{{ $out->id }}" class="btn btn-sm btn-info">{{ floatval($out->out_amount) }}</td>
+                                	<td>{{ $out->userName }}</td>
                                 	@if(!$a->usingWechat())                        
                                     <td>{{ $out->out_item }}</td>
                                     <td>{{ $out->outBill }}</td>
@@ -94,13 +92,12 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th>日期</th>
                                     <th>金额</th>
                                     <th>流向</th>
-                                    <th>日期</th>
                                     @if(!$a->usingWechat())                        
                                     <th>方式</th>
-                                    <th>内容</th>
+                                    <th>用途</th>
                                     <th>创建人</th>
                                     @endif
                                 </tr>
@@ -108,14 +105,13 @@
                             <tbody>
                             @foreach($trans as $tran)
                             	<tr>
-                            		<td>{{ $tran->id }}</td>
+                                    <td>{{ $tran->tran_date }}</td>
                                     @if($tran->tran_state != 1)
                                 	<td><a href="/finance/trans/show/{{ $tran->id }}" class="btn btn-sm btn-danger">{{ floatval($tran->tran_amount) }}</td>
                                     @else
                                     <td><a href="/finance/trans/show/{{ $tran->id }}" class="btn btn-sm btn-info">{{ floatval($tran->tran_amount) }}</td>
                                     @endif
-                                	<td>{{ $tran->fromName }} --> {{ $tran->toName }}</td>
-                                	<td>{{ $tran->tran_date }}</td>
+                                	<td>{{ $tran->fromName }}>{{ $tran->toName }}</td>
                                 	@if(!$a->usingWechat())                        
                                     <td>{{ $tran->tranType }}</td>
                                     <td>{{ $tran->tran_item }}</td>
@@ -161,7 +157,7 @@
                         <p></p>
                         <label id="type_label">姓名</label>
                         <div class="form-group">   
-                        {!! Form::text('seekName',null,['class'=>'form-control']) !!}
+                        {!! Form::select('seekName',$Mb,null,['class'=>'form-control']) !!}
                         </div>        
 
                         {!! Form::submit("查询", ['class'=>'btn btn-info btn-block']) !!}
