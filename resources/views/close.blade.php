@@ -7,7 +7,7 @@ $wechat_url = $h->app('ssl')."://res.wx.qq.com/open/js/jweixin-1.1.0.js";
 <!DOCTYPE html>
 <html>
 <head>
-	<title>close</title>
+	<title></title>
 </head>
 <body>
 <script src={{ $wechat_url }} type="text/javascript" ></script>
