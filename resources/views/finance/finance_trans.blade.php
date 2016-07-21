@@ -3,7 +3,7 @@ $h = new FooWeChat\Helpers\Helper;
 
 $type = $h->getSelect('financeTran');
 
-$f_or_t = ['给予','收到']
+$f_or_t = ['给予'.$M_name.'资金','收到'.$M_name.'资金']
 ?>
 @extends('head')
 
