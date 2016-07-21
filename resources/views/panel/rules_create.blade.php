@@ -1,10 +1,6 @@
 <?php
-$h = new FooWeChat\Helpers\Helper;
-
-$id = Session::get('id');
-$name = Session::get('name');
-$bill = $h->getSelect('financeOut');
-
+	$id = Session::get('id');
+	$level = ['普通', '重要' ,'非常重要'];
 ?>
 @extends('head')
 
@@ -13,41 +9,36 @@ $bill = $h->getSelect('financeOut');
 	<div class="col-md-4 col-md-offset-4">
   
 	<ol class="breadcrumb">
-		<li><a href="/finance">财务</a></li>
-		<li class="active" >支出</li>
+		<li><a href="/panel">面板</a></li>
+		<li><a href="/panel/rules">规章制度</a></li>
 	</ol>
 		<div class="panel panel-info">
 			<div class="panel-heading">
-			<i class="glyphicon glyphicon-user"></i>&nbsp{{ $name }}
+			<i class="glyphicon glyphicon-tasks"></i>&nbsp新增规章
 			<!-- <a style=" float:right;" href="#" class="glyphicon glyphicon-question-sign"></a> -->
 			</div>
 			<div class="panel-body">
 
-			{!! Form::open(['url'=>'finance/outs/store', 'role' => 'form']) !!}
-			{!! Form::hidden('out_user', $id) !!}
+			{!! Form::open(['url'=>'panel/rules/store', 'role' => 'form']) !!}
+			{!! Form::hidden('user_id', $id) !!}
 
 			<div class="form-group">
-			  {!! Form::text('out_amount',null,['placeholder'=>'金额', 'class'=>'form-control']) !!}
-			</div>
-			
-			<div class="form-group">
-			  {!! Form::text('out_item',null,['placeholder'=>'支出项', 'class'=>'form-control']); !!}
-			</div>
-			
-			<div class="form-group">
-			    <input name = "out_date" type = "date" class = "form-control">
+			  {!! Form::select('dp_id',$dp,null,['class'=>'form-control']); !!}
 			</div>
 
 			<div class="form-group">
-			  {!! Form::select('out_bill',$bill,null,['class'=>'form-control']); !!}
+		        {!! Form::text('order','',['placeholder'=>'排序(填写数字)', 'class'=>'form-control']) !!}
+		    </div>
+
+			<div class="form-group">
+			  {!! Form::select('level',$level,null,['class'=>'form-control']); !!}
 			</div>
 
 			<div class="form-group">
-			  {!! Form::select('out_about',$dp,null,['class'=>'form-control']); !!}
+			  {!! Form::textarea('content',null,['placeholder'=>'内容', 'class'=>'form-control', 'rows'=>'10']) !!}
 			</div>
 
 			{!! Form::submit('提交', ['class'=>'btn btn-info btn-block']) !!}
-
 			{!! Form::close() !!}
 
 			</div>

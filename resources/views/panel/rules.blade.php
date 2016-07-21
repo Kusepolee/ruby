@@ -9,7 +9,7 @@
                 <div class="col-md-12">
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            <h4><a href="">总章</a></h4>
+                            <h4><a href="/panel/rules/create">总章</a></h4>
                         </div>
                         <div class="panel-body">
                             <blockquote>
