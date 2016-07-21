@@ -39,7 +39,7 @@ class FinanceController extends Controller
 							->leftjoin('config', 'finance_outs.out_bill', '=', 'config.id')
 							->leftjoin('members as a', 'finance_outs.out_user', '=', 'a.id')
 							->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName', 'a.name as userName')
-							->paginate(30);
+							->paginate(100);
 			$trans = FinanceTrans::where(function ($query) { 
 	                            if(count($this->seekNameArray)) $query->whereIn('finance_trans.tran_from', $this->seekNameArray)
 	                            									->orwhereIn('finance_trans.tran_to', $this->seekNameArray);
@@ -51,7 +51,7 @@ class FinanceController extends Controller
 							->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
 							->leftjoin('config', 'finance_trans.tran_type', '=', 'config.id')
 							->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType', 'b.name as createdByName', 'c.name as toName')
-							->paginate(30);
+							->paginate(100);
 			
 
 		}elseif ($a->auth(['admin'=>'no', 'position'=>'=总监'])) {
@@ -70,7 +70,7 @@ class FinanceController extends Controller
 							->leftjoin('config', 'finance_outs.out_bill', '=', 'config.id')
 							->leftjoin('members as a', 'finance_outs.out_user', '=', 'a.id')
 							->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName', 'a.name as userName')
-							->paginate(30);				
+							->paginate(100);				
 			$recs = Member::where('department', $user_dp)->get();
 			foreach ($recs as $rec) {
 				$name = $rec->name;
@@ -88,7 +88,7 @@ class FinanceController extends Controller
 							->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
 							->leftjoin('config', 'finance_trans.tran_type', '=', 'config.id')
 							->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType', 'b.name as createdByName', 'c.name as toName')
-							->paginate(30);
+							->paginate(100);
 
 		}else{
 			$id = Session::get('id');
@@ -99,7 +99,7 @@ class FinanceController extends Controller
 							->leftjoin('config', 'finance_outs.out_bill', '=', 'config.id')
 							->leftjoin('members as a', 'finance_outs.out_user', '=', 'a.id')
 							->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName', 'a.name as userName')
-							->paginate(30);
+							->paginate(100);
 			$trans = FinanceTrans::where('tran_to', $id)
 							->orwhere('tran_from', $id)
 							->orderBy('tran_date', 'desc')
@@ -109,7 +109,7 @@ class FinanceController extends Controller
 							->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
 							->leftjoin('config', 'finance_trans.tran_type', '=', 'config.id')
 							->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType', 'b.name as createdByName', 'c.name as toName')
-							->paginate(30);
+							->paginate(100);
 		}
 
 		$departments = Department::where('id', '>', 1)
