@@ -38,6 +38,7 @@ $full_seek_string = $rescType_string."-".$key_string;
             <div id="myTabContent" class="tab-content">
                 <!-- resources list -->
                 <div class="tab-pane fade active in" id="resources">
+                @if(!$t->usingWechat())
                     <div class="table-responsive">
                         @if(count($outs))
                             <table class="table table-hover">
@@ -47,22 +48,18 @@ $full_seek_string = $rescType_string."-".$key_string;
                                         <th>名称</th>
                                         <th>型号</th>
                                         <th>库存</th>
-                                        <th>单位</th>
-                                        @if(!$t->usingWechat())                        
+                                        <th>单位</th>                        
                                         <th>类型</th>
                                         <th>提醒值</th>
                                         <th>报警值</th>
                                         <th>创建人</th>
                                         <th>备注</th>
-                                        @endif
-
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($outs as $out)
                                         <tr>
                                             <td>{{ $out->id }}</td>
-                        
                                             @if($h->rescState($out->id) == 0)
                                                 <td> <a href="/resource/show/{{ $out->id }}" class="btn btn-sm btn-default">{{ $out->name }}</a>
                                                 @elseif($h->rescState($out->id) == 1)
@@ -77,14 +74,12 @@ $full_seek_string = $rescType_string."-".$key_string;
                                             </td>
                                             <td>{{ $out->model }}</td>
                                             <td>{{ floatval($out->remain) }}</td>
-                                            <td>{{ $out->unitName }}</td>
-                                            @if(!$t->usingWechat())
+                                            <td>{{ $out->model }}</td>
                                             <td>{{ $out->typeName }}</td>
                                             <td>{{ floatval($out->notice) }}</td>
                                             <td>{{ floatval($out->alert) }}</td>
                                             <td>{{ $out->createByName }}</td>
                                             <td>{{ $out->content }}</td>
-                                            @endif
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -106,6 +101,72 @@ $full_seek_string = $rescType_string."-".$key_string;
                             {!! $outs->render() !!}
                             </div>
                     </div>
+                @else
+                    <p></p>    
+                    <div class="row">
+                        <div class="container">
+                        @if(count($outs))
+                            @foreach($outs as $out)
+                                @if($h->rescState($out->id) == 0)
+                                <div class="alert alert-default" style="border-width:1px; border-color:#e4e4e4;">
+                                @elseif($h->rescState($out->id) == 1)
+                                <div class="alert alert-danger">
+                                @elseif($h->rescState($out->id) == 2)
+                                <div class="alert alert-warning">
+                                @elseif($h->rescState($out->id) == 3)
+                                <div class="alert alert-success">
+                                @else
+                                <div class="alert alert-info">
+                                @endif
+                                @if(isset($out) && $out->img != '' && $out->img != null)
+                                    <a href="/resource/show/{{ $out->id }}"><img style="float:left; width:80px;" src="{{ URL::asset("upload/resource/").'/'.$out->img }}" class="img-thumbnail"/></a>
+                                    <h4 style="padding-left:100px;"><a href="/resource/show/{{ $out->id }}">{{ $out->name }}</a><span style="font-size:14px; color:#000; font-weight:250;">@if(isset($out) && $out->model != '' && $out->model != null) - {{ $out->model }}@endif / {{ floatval($out->remain) }} {{ $out->unitName }}</span></h4>
+                                    <p style="padding-left:100px;">@if(isset($out) && $out->notice !=0 && $out->alert != 0)
+                                    @if(isset($out) && $out->notice != '' && $out->notice != null)
+                                    提醒值: {{ floatval($out->notice) }}
+                                    @endif
+                                    @if(isset($out) && $out->alert != '' && $out->alert != null)
+                                    报警值: {{ floatval($out->alert) }}
+                                    @endif
+                                    @else
+                                        无提示和报警值,<a href="/resource/edit/{{ $out->id }}">立即设置</a>
+                                    @endif</p>
+                                    <p style="padding-left:100px;">@if(isset($out) && $out->content != '' && $out->content != null)备注: {{ $out->content }}@else备注: 无@endif</p>
+                                @else
+                                    <h4><a href="/resource/show/{{ $out->id }}">{{ $out->name }}</a><span style="font-size:14px; color:#000; font-weight:250;">@if(isset($out) && $out->model != '' && $out->model != null) - {{ $out->model }}@endif / {{ floatval($out->remain) }} {{ $out->unitName }}</span></h4>
+                                    <p>@if(isset($out) && $out->notice !=0 && $out->alert != 0)
+                                    @if(isset($out) && $out->notice != '' && $out->notice != null)
+                                    提醒值: {{ floatval($out->notice) }}
+                                    @endif
+                                    @if(isset($out) && $out->alert != '' && $out->alert != null)
+                                    报警值: {{ floatval($out->alert) }}
+                                    @endif
+                                    @else
+                                        无提示和报警值,<a href="/resource/edit/{{ $out->id }}">立即设置</a>
+                                    @endif</p>
+                                    <p>@if(isset($out) && $out->content != '' && $out->content != null)备注: {{ $out->content }}@else备注: 无@endif</p>
+                                @endif
+                                </div>
+                            @endforeach
+                        @else
+                            <p></p>
+                            <div class="col-md-4 col-sm-4 col-md-offset-4">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        <em class="glyphicon glyphicon-info-sign"></em>&nbsp&nbsp提示
+                                    </div>
+                                    <div class="panel-body">
+                                        <p>无记录: 可能因没有符合查询条件记录, 或尚未有数据录入</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                            <div> 
+                            {!! $outs->render() !!}
+                            </div>    
+                        </div>
+                    </div>
+                @endif
                 </div>
                 <!-- seek -->
                 <div class="tab-pane fade" id="seek">
