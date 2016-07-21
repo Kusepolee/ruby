@@ -148,8 +148,22 @@ Route::get('/test2', function () {
 });
 
 Route::get('/test1', function () {
-	//return redirect('/panel');
-	phpinfo();
+	$x1 = 34.12757;
+	$y1 = 118.8945;
+
+	$x2 = 34.12778;
+	$y2 = 118.8962;
+
+	$x3 = 34.12809;
+	$y3 = 118.8967;
+
+	$d1 = sqrt(($x1-$x2)*($x1-$x2)+($y1-$y2)*($y1-$y2));
+
+	echo $d1;
+
+	$d2 = sqrt(($x1-$x3)*($x1-$x3)+($y1-$y3)*($y1-$y3));
+
+	echo '</br>'.$d2;
 
 });
 
