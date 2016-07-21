@@ -123,6 +123,8 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::post('/panel/complaints/image/store', 'Panel\PanelController@imageStore');
 	Route::get('/panel/complaints/record', 'Panel\PanelController@complaintsRecord');
 	Route::get('/panel/complaints/show/{id}', 'Panel\PanelController@complaintsShow');
+	Route::get('/panel/rules', 'Panel\PanelController@rules');
+	Route::get('/panel/proof', 'Panel\PanelController@proof');
 
 	Route::get('/panel/member/check', 'MemberController@check');
 

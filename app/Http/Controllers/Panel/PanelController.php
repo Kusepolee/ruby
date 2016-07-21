@@ -262,8 +262,27 @@ class PanelController extends Controller
                 }
             }
         }
-        return view('panel.complaints_show', ['rec'=>$rec, 'user_name'=>$user_name, 'dp'=>$dp, 'img'=>$img]);
-        
+        return view('panel.complaints_show', ['rec'=>$rec, 'user_name'=>$user_name, 'dp'=>$dp, 'img'=>$img]);        
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function rules()
+    {
+        return view('panel.rules');
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function proof()
+    {
+        return view('panel.proof');
     }
 
     public function check()
