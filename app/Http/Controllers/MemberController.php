@@ -804,7 +804,7 @@ class MemberController extends Controller
     */
     public function close()
     {
-      return view('colse');
+      return view('close');
     }
 
     /**
