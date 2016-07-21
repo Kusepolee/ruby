@@ -18,10 +18,17 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $out = Department::orderBy('order')
-                         ->groupBy('parentid')
-                         ->get();
-        print_r($out);
+        $all = Department::orderBy('id')->get();
+        $arr = $all->toArray();
+
+        $array = [];
+        $array = array_add($array, 'name'=> $arr[0]['name']);
+
+        foreach ($arr as $key) {
+            
+        }
+
+        print_r($arr);
     }
 
     /**
@@ -33,6 +40,7 @@ class DepartmentController extends Controller
     {
         $api = new WeChatAPI;
         $a = $api->initDepartments();
+
         //return $a;
         //return $api;
     }    

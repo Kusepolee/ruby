@@ -799,6 +799,15 @@ class MemberController extends Controller
     }
 
     /**
+    * 关闭页面并返回微信
+    *
+    */
+    public function close()
+    {
+      return view('colse');
+    }
+
+    /**
     * other functions
     *
     */

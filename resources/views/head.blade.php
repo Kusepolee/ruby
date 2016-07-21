@@ -60,6 +60,8 @@
            @else
            <li class="divider"></li>
            <li><a href="/cookie/clear"><span class="pull-left glyphicon glyphicon-repeat"></span>&nbsp&nbsp初始化</a></li>
+           <li class="divider"></li>
+           <li><a href="/member/close"><span class="pull-left glyphicon glyphicon-off"></span>&nbsp&nbsp返回微信</a></li>
            @endif
 
            </ul>

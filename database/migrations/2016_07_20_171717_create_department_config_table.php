@@ -14,6 +14,9 @@ class CreateDepartmentConfigTable extends Migration
     {
         Schema::create('department_config', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('department_id');
+            $table->string('work_time')->nullable();
+            $table->integer('work_week')->nullable();
             $table->timestamps();
         });
     }
