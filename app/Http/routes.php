@@ -70,6 +70,7 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::get('/member/password/form', 'MemberController@passwordForm');
 	Route::get('/member/image/set', 'MemberController@image');
 	Route::post('/member/image/store/{id?}', 'MemberController@imageStore');
+	Route::get('/member/close', 'MemberController@close');
 	//考勤加班
 	Route::post('/member/check/store', 'MemberController@checkStore');
 
@@ -138,10 +139,10 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 */
 
 
-Route::post('/upload_test', 'OaController@test');
+Route::get('/test', 'DepartmentController@index');
 
 
-Route::get('/test', function () {
+Route::get('/test2', function () {
 	$arr = ['color'=>'success', 'type'=>'5','code'=>'5.1', 'btn'=>'关闭', 'link'=>'javascript:close();'];
     return view('note',$arr);
 });

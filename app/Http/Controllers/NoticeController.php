@@ -116,8 +116,9 @@ class NoticeController extends Controller
         Logie::add(['warning', '群体发消息,'.$request->notice]);
 
         //页面
-        $arr = ['color'=>'success', 'type'=>'5','code'=>'5.2', 'btn'=>'返回', 'link'=>'/member'];
-        return view('note',$arr);
+        //$arr = ['color'=>'success', 'type'=>'5','code'=>'5.2', 'btn'=>'返回', 'link'=>'/member'];
+        //return view('note',$arr);
+        return view('close');
 
     }
 

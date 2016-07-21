@@ -23,6 +23,7 @@
     "Croppie": "croppie#^2.2.0",
     "fullcalendar": "^2.9.0",
     "iCheck": "icheck#^1.0.2",
-    "Chart.js": "^2.1.6"
+    "Chart.js": "^2.1.6",
+    "orgchart": "^1.1.2"
   }
 }
