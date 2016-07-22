@@ -812,7 +812,7 @@ class MemberController extends Controller
       foreach ($outs as $key) {
         # code...
       
-        $str = $key->memberName. ' : '. floatval($key->member_check.latitude).'/'.floatval($key->member_check.longitude).'</br>';
+        $str = $key->memberName. ' : '. floatval($key->latitude).'/'.floatval($key->longitude).'</br>';
         echo $str;
       //print_r($arr);
       }
