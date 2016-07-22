@@ -22,11 +22,21 @@
     </ol>
         <ul id="myTab" class="nav nav-tabs">
         @if(count($seekDp) || count($seekName))
+            @if(Input::has('p'))
+            <li class=""><a href="#outs" data-toggle="tab">支出</a>
+            <li class="active"><a href="#trans" data-toggle="tab">流向</a>
+            @else
             <li class="active"><a href="#outs" data-toggle="tab">支出</a>
             <li class=""><a href="#trans" data-toggle="tab">流向</a>
+            @endif
         @else
+            @if(Input::has('p'))
+            <li class=""><a href="#outs" data-toggle="tab">支出</a>
+            <li class="active"><a href="#trans" data-toggle="tab">流向</a>
+            @else
             <li class="active"><a href="#outs" data-toggle="tab">支出</a>
             <li class=""><a href="#trans" data-toggle="tab">流向</a>
+            @endif
         @endif
             <!-- 余额 -->
         @if ($a->auth(['position'=>'>=总监']))
@@ -36,7 +46,11 @@
         </ul>
         <div id="myTabContent" class="tab-content">
             <!-- outs list -->
+            @if(Input::has('p'))
+            <div class="tab-pane fade" id="outs">
+            @else
             <div class="tab-pane fade active in" id="outs">
+            @endif
                 <div class="table-responsive">
                     @if(count($outs))
                         <table class="table table-hover">
@@ -87,7 +101,11 @@
             </div>
             <!-- end of outs list -->
             <!-- trans list -->
+            @if(Input::has('p'))
+            <div class="tab-pane fade active in" id="trans">
+            @else
             <div class="tab-pane fade" id="trans">
+            @endif
                 <div class="table-responsive">
                     @if(count($trans))
                         <table class="table table-hover">
