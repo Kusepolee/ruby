@@ -798,6 +798,24 @@ class MemberController extends Controller
         return view('note',$arr);
     }
 
+    /*
+    * 校准gps信息
+    *
+    */
+    public function initGPS()
+    {
+      $outs = MemberCheck::leftJoin('members', 'member_check.user_id', '=', 'members.id')
+                  ->select('member_check.*', 'members.name as memberName')
+                  ->groupBy('member_check.user_id')
+                  ->get();
+      //$arr = $outs->toArray();
+      foreach ($outs as $key) {
+        $str = $key->memberName. ' : '. floatval($key->latitude).'/'.floatval($key->longitude).'</br>';
+        echo $str;
+      }
+      
+    }
+
     /**
     * 关闭页面并返回微信
     *
