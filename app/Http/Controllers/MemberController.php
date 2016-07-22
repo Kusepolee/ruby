@@ -808,8 +808,13 @@ class MemberController extends Controller
                   ->select('member_check.*', 'members.name as memberName')
                   ->groupBy('member_check.user_id')
                   ->get();
-      $arr = $outs->toArray();
-      print_r($arr);
+      //$arr = $outs->toArray();
+      foreach ($outs as $key) {
+        # code...
+      }
+      $str = $key->memberName. ' : '. floatval($key->member_check.latitude).'/'.floatval($key->member_check.longitude).'</br>';
+      echo $str;
+      //print_r($arr);
     }
 
     /**
