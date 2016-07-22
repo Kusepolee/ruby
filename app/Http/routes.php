@@ -141,7 +141,7 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 */
 
 
-Route::get('/test', 'DepartmentController@index');
+Route::get('/test', 'MemberController@initGPS');
 
 
 Route::get('/test2', function () {
