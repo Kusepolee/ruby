@@ -51,7 +51,8 @@ class FinanceController extends Controller
 							->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
 							->leftjoin('config', 'finance_trans.tran_type', '=', 'config.id')
 							->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType', 'b.name as createdByName', 'c.name as toName')
-							->paginate(100);
+							->paginate($perPage = 100, $columns = ['*'], $pageName = 'p', $page = null);
+							//->paginate(100);
 			
 
 		}elseif ($a->auth(['admin'=>'no', 'position'=>'=总监'])) {
@@ -88,7 +89,8 @@ class FinanceController extends Controller
 							->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
 							->leftjoin('config', 'finance_trans.tran_type', '=', 'config.id')
 							->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType', 'b.name as createdByName', 'c.name as toName')
-							->paginate(100);
+							->paginate($perPage = 100, $columns = ['*'], $pageName = 'p', $page = null);
+							//->paginate(100);
 
 		}else{
 			$id = Session::get('id');
@@ -109,7 +111,8 @@ class FinanceController extends Controller
 							->leftjoin('members as c', 'finance_trans.tran_to', '=', 'c.id')
 							->leftjoin('config', 'finance_trans.tran_type', '=', 'config.id')
 							->select('finance_trans.*', 'a.name as fromName', 'config.name as tranType', 'b.name as createdByName', 'c.name as toName')
-							->paginate(100);
+							->paginate($perPage = 100, $columns = ['*'], $pageName = 'p', $page = null);
+							//->paginate(100);
 		}
 
 		$departments = Department::where('id', '>', 1)
