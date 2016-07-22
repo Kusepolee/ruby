@@ -165,7 +165,7 @@ class FinanceController extends Controller
         $h = new Helper;
         $user = Session::get('name');
 
-        $body = '[资金支出]'.$user.' 支出: ¥ '.floatval($request->out_amount).' 用途: '.$request->out_item;
+        $body = '[资金支出]'.' '.$request->out_date.','.$user.'支出: ¥ '.floatval($request->out_amount).' 用途:'.$request->out_item;
 
         $array = [
               'user'       => '8|6',//8|6|2
@@ -213,13 +213,13 @@ class FinanceController extends Controller
 			$input['tran_from'] = $request->S_id;
 			$input['tran_to'] = $request->M_id;
 
-	        $body = '[资金流向]'.$request->S_name.' -> '.$request->M_name.' : ¥ '.floatval($request->tran_amount).' 用途: '.$request->tran_item;
+	        $body = '[资金流向]'.' '.$request->tran_date.','.$request->S_name.'->'.$request->M_name.': ¥ '.floatval($request->tran_amount).' 用途:'.$request->tran_item;
 
         }else{
 			$input['tran_from'] = $request->M_id;
 			$input['tran_to'] = $request->S_id;
 			
-	        $body = '[资金流向]'.$request->M_name.' -> '.$request->S_name.' : ¥ '.floatval($request->tran_amount).' 用途: '.$request->tran_item;
+	        $body = '[资金流向]'.' '.$request->tran_date.','.$request->M_name.'->'.$request->S_name.': ¥ '.floatval($request->tran_amount).' 用途:'.$request->tran_item;
 
         }
 
@@ -309,7 +309,7 @@ class FinanceController extends Controller
         $w = new WeChatAPI;
         $h = new Helper;
 
-        $body = '[资金往来] 您创建的信息: '.$fromName.' -> '.$toName.' : ¥ '.floatval($rec->tran_amount).' 用途: '.$rec->tran_item."\n".'已由 '.$S_name.' 确认';
+        $body = '[资金往来] 您创建的信息:'.$rec->tran_date.','.$fromName.'->'.$toName.': ¥ '.floatval($rec->tran_amount).' 用途:'.$rec->tran_item."\n".'已由'.$S_name.'确认';
 
         $work_id = Member::find($rec->createdBy)->work_id;
 
