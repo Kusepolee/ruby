@@ -811,10 +811,11 @@ class MemberController extends Controller
       //$arr = $outs->toArray();
       foreach ($outs as $key) {
         # code...
-      }
-      $str = $key->memberName. ' : '. floatval($key->member_check.latitude).'/'.floatval($key->member_check.longitude).'</br>';
-      echo $str;
+      
+        $str = $key->memberName. ' : '. floatval($key->member_check.latitude).'/'.floatval($key->member_check.longitude).'</br>';
+        echo $str;
       //print_r($arr);
+      }
     }
 
     /**
