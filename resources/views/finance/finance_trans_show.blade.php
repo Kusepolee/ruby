@@ -30,6 +30,7 @@ if(Session::has('id')) $S_id = Session::get('id');
                             <p>方式: {{ $rec->tranType }}</p>
                             <p>日期: {{ $rec->tran_date }}</p>
                             <p>用途: {{ $rec->tran_item }}</p>
+                            <p>登记日期: {{ $rec->created_at }}</p>
                         </div>
                     </div>
                     @if($S_id != $rec->tran_from && $S_id != $rec->tran_to)

@@ -26,7 +26,7 @@ class FinanceTranRequest extends Request
     {
         return [
             'tran_amount' => 'required|numeric|min:1',
-            'tran_item' => 'required|min:1|max:20',
+            'tran_item' => 'required|min:1|max:50',
             'tran_date' => 'required',
             'tran_type' => 'required',
             'f_or_t' => 'required',

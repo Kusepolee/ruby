@@ -98,7 +98,6 @@
                                     @if(!$a->usingWechat())                        
                                     <th>方式</th>
                                     <th>用途</th>
-                                    <th>创建人</th>
                                     @endif
                                 </tr>
                             </thead>
@@ -115,7 +114,6 @@
                                 	@if(!$a->usingWechat())                        
                                     <td>{{ $tran->tranType }}</td>
                                     <td>{{ $tran->tran_item }}</td>
-                                    <td>{{ $tran->createdByName }}</td>
                                     @endif
                             	</tr>
                             @endforeach    

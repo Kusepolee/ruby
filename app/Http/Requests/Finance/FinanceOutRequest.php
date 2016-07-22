@@ -26,7 +26,7 @@ class FinanceOutRequest extends Request
     {
         return [
             'out_amount' => 'required|numeric|min:1',
-            'out_item' => 'required|min:1|max:20',
+            'out_item' => 'required|min:1|max:50',
             'out_date' => 'required',
             'out_bill' => 'required',
             'out_about' => 'required',

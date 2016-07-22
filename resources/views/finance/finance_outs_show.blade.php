@@ -20,6 +20,7 @@
                             <p>票据: {{ $rec->outBill }}</p>
                             <p>日期: {{ $rec->out_date }}</p>
                             <p>用途: {{ $rec->out_item }}</p>
+                            <p>登记日期: {{ $rec->created_at }}</p>
                         </div>
                     </div>
             </div>
