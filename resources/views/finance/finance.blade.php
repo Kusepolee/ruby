@@ -1,6 +1,7 @@
 <?php
 	$a = new FooWeChat\Authorize\Auth;
 	$h = new FooWeChat\Helpers\Helper;
+    $id = Session::get('id');
 
     count($seekDp) ? $seekDp_string = implode("|", $seekDp) : $seekDp_string = '_not';
     count($seekName) ? $seekName_string = implode("|", $seekName) : $seekName_string = '_not';
@@ -141,7 +142,13 @@
             <!-- seek -->
             <div class="tab-pane fade" id="seek">
                 <div class="col-md-4 col-md-offset-4">
-                    <div class="panel-heading"><em class="glyphicon glyphicon-th-list"></em>&nbsp&nbsp筛选条件:<a style=" float:right;" href="" class="glyphicon glyphicon-question-sign"></a></div>
+                    <div class="panel-heading">
+                        {!! Form::open(['url'=>'finance/seek', 'role' => 'form', 'id' => 'self_seek']) !!}
+                        {!! Form::hidden('seekName', $id) !!}
+                        {!! Form::hidden('seekDp', '') !!}
+                        {!! Form::close() !!}
+                        <em class="glyphicon glyphicon-th-list"></em>&nbsp&nbsp筛选条件:<a href="javascript:selfSeek();"> 只显示自己</a><a style=" float:right;" href="" class="glyphicon glyphicon-question-sign"></a>
+                    </div>
                     <div class="panel-heading">
 
                         {!! Form::open(['url'=>'finance/seek', 'role' => 'form']) !!}
@@ -176,7 +183,7 @@
                           <span id="info_txt"></span>
                             <blockquote>
                             <small>将本次查询结果保存为Excel文件, 若有多页, 则所有结果都保存,但Excel文件中不再分页。</small>
-                          </blockquote>
+                            </blockquote>
                                   <!-- form excel -->
                                   {!! Form::open(['url'=>'/excel/finance', 'role' => 'form', 'id'=>'excel_get']) !!}
                                   {!! Form::hidden('seek_string', $full_seek_string) !!}
@@ -203,6 +210,10 @@
 // excel
 function getExcel(){
   $("#excel_get").submit();
+}
+// self_seek
+function selfSeek(){
+  $("#self_seek").submit();
 }
 </script>
 
