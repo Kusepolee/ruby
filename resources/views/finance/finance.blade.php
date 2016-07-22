@@ -1,6 +1,7 @@
 <?php
 	$a = new FooWeChat\Authorize\Auth;
 	$h = new FooWeChat\Helpers\Helper;
+    $id = Session::get('id');
 
     count($seekDp) ? $seekDp_string = implode("|", $seekDp) : $seekDp_string = '_not';
     count($seekName) ? $seekName_string = implode("|", $seekName) : $seekName_string = '_not';
@@ -21,11 +22,21 @@
     </ol>
         <ul id="myTab" class="nav nav-tabs">
         @if(count($seekDp) || count($seekName))
+            @if(Input::has('p'))
+            <li class=""><a href="#outs" data-toggle="tab">支出</a>
+            <li class="active"><a href="#trans" data-toggle="tab">流向</a>
+            @else
             <li class="active"><a href="#outs" data-toggle="tab">支出</a>
             <li class=""><a href="#trans" data-toggle="tab">流向</a>
+            @endif
         @else
+            @if(Input::has('p'))
+            <li class=""><a href="#outs" data-toggle="tab">支出</a>
+            <li class="active"><a href="#trans" data-toggle="tab">流向</a>
+            @else
             <li class="active"><a href="#outs" data-toggle="tab">支出</a>
             <li class=""><a href="#trans" data-toggle="tab">流向</a>
+            @endif
         @endif
             <!-- 余额 -->
         @if ($a->auth(['position'=>'>=总监']))
@@ -35,7 +46,11 @@
         </ul>
         <div id="myTabContent" class="tab-content">
             <!-- outs list -->
+            @if(Input::has('p'))
+            <div class="tab-pane fade" id="outs">
+            @else
             <div class="tab-pane fade active in" id="outs">
+            @endif
                 <div class="table-responsive">
                     @if(count($outs))
                         <table class="table table-hover">
@@ -86,7 +101,11 @@
             </div>
             <!-- end of outs list -->
             <!-- trans list -->
+            @if(Input::has('p'))
+            <div class="tab-pane fade active in" id="trans">
+            @else
             <div class="tab-pane fade" id="trans">
+            @endif
                 <div class="table-responsive">
                     @if(count($trans))
                         <table class="table table-hover">
@@ -141,7 +160,13 @@
             <!-- seek -->
             <div class="tab-pane fade" id="seek">
                 <div class="col-md-4 col-md-offset-4">
-                    <div class="panel-heading"><em class="glyphicon glyphicon-th-list"></em>&nbsp&nbsp筛选条件:<a style=" float:right;" href="" class="glyphicon glyphicon-question-sign"></a></div>
+                    <div class="panel-heading">
+                        {!! Form::open(['url'=>'finance/seek', 'role' => 'form', 'id' => 'self_seek']) !!}
+                        {!! Form::hidden('seekName', $id) !!}
+                        {!! Form::hidden('seekDp', '') !!}
+                        {!! Form::close() !!}
+                        <em class="glyphicon glyphicon-th-list"></em>&nbsp&nbsp筛选条件:<a href="javascript:selfSeek();"> 只显示自己</a><a style=" float:right;" href="" class="glyphicon glyphicon-question-sign"></a>
+                    </div>
                     <div class="panel-heading">
 
                         {!! Form::open(['url'=>'finance/seek', 'role' => 'form']) !!}
@@ -176,7 +201,7 @@
                           <span id="info_txt"></span>
                             <blockquote>
                             <small>将本次查询结果保存为Excel文件, 若有多页, 则所有结果都保存,但Excel文件中不再分页。</small>
-                          </blockquote>
+                            </blockquote>
                                   <!-- form excel -->
                                   {!! Form::open(['url'=>'/excel/finance', 'role' => 'form', 'id'=>'excel_get']) !!}
                                   {!! Form::hidden('seek_string', $full_seek_string) !!}
@@ -203,6 +228,10 @@
 // excel
 function getExcel(){
   $("#excel_get").submit();
+}
+// self_seek
+function selfSeek(){
+  $("#self_seek").submit();
 }
 </script>
 
