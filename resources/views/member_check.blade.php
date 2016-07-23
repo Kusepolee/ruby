@@ -21,10 +21,15 @@ Session::has('deviceid') ? $deviceid = Session::get('deviceid') : $deviceid = 'N
 {!! Form::close() !!}
 
 <div class="container">
+    {{-- 面包屑 --}}
+    <ol class="breadcrumb">
+        <li><a href="/panel" class="btn btn-xs btn-info">返回工作面版</a></li>
+    </ol>
+    {{-- 面包屑 --}}
     <div class="col-md-4 col-sm-4" id="excel_div">
-    	<div class="panel panel-success">
+    	<div class="panel panel-info">
         <div class="panel-heading">
-            <i class="glyphicon glyphicon-th"></i>&nbsp&nbsp考勤和加班
+            <i class="glyphicon glyphicon-map-marker"></i>&nbsp&nbsp考勤和加班
         </div>
         <div class="panel-body">
           <span id="info_txt"></span>
@@ -33,7 +38,7 @@ Session::has('deviceid') ? $deviceid = Session::get('deviceid') : $deviceid = 'N
           </blockquote>
         </div>
         <div class="panel-footer">
-            <a class="btn btn-sm btn-success btn-block" href="javascript:locate();">提交位置信息</a>
+            <a class="btn btn-sm btn-info btn-block" href="javascript:locate();">提交位置信息</a>
         </div>
     	</div>
 	</div>

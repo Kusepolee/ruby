@@ -137,7 +137,7 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 
 	// - 系统设置
 	Route::get('panel/config', 'Panel\PanelController@config');
-	Route::get('panel/config/work_time', 'WorkTimeController@index');
+	Route::get('panel/config/work_time', 'Panel\WorkTimeController@index');
 
 });
 
