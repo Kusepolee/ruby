@@ -70,7 +70,11 @@
                             @foreach($outs as $out)
                                 <tr>
                                 	<td>{{ $out->out_date }}</td>
+                                    @if($out->out_bill != '29')
                                 	<td><a href="/finance/outs/show/{{ $out->id }}" class="btn btn-sm btn-info">{{ floatval($out->out_amount) }}</td>
+                                    @else
+                                    <td><a href="/finance/outs/show/{{ $out->id }}" class="btn btn-sm btn-success">{{ floatval($out->out_amount) }}</td>
+                                    @endif
                                 	<td>{{ $out->userName }}</td>
                                 	@if(!$a->usingWechat())                        
                                     <td>{{ $out->out_item }}</td>
