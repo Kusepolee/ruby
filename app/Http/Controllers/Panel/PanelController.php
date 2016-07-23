@@ -322,7 +322,7 @@ class PanelController extends Controller
     * 显示系统设置页面
     *
     */
-    public function check()
+    public function config()
     {
       return view('panel.config');
     }
