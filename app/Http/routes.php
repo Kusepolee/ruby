@@ -148,8 +148,13 @@ Route::get('/test', function () {
 
 
 Route::get('/test2', function () {
-	$arr = ['color'=>'success', 'type'=>'5','code'=>'5.1', 'btn'=>'关闭', 'link'=>'javascript:close();'];
-    return view('note',$arr);
+	$url = Input::get('p');
+
+	if(Input::has('p')){
+		echo "fuck";
+	}else{
+		echo "good";
+	}
 });
 
 Route::get('/test1', function () {
