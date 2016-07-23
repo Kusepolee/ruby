@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Department;
 use App\Member;
 use App\MemberCheck;
 use App\Position;
-use App\Department;
 use Config;
 use Cookie;
 use FooWeChat\Authorize\Auth;

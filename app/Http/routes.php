@@ -116,7 +116,8 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::get('/finance/trans/confirm/{id}', 'Finance\FinanceController@tranConfirm');
 	Route::post('/finance/seek', 'Finance\FinanceController@financeSeek');
 
-	//面板
+	/*--- 面版 ---*/
+	// -投诉
 	Route::get('/panel', 'Panel\PanelController@index');
 	Route::get('/panel/complaints', 'Panel\PanelController@complaints');
 	Route::post('/panel/complaints/store', 'Panel\PanelController@complaintsStore');
@@ -124,12 +125,19 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::post('/panel/complaints/image/store', 'Panel\PanelController@imageStore');
 	Route::get('/panel/complaints/record', 'Panel\PanelController@complaintsRecord');
 	Route::get('/panel/complaints/show/{id}', 'Panel\PanelController@complaintsShow');
+
+	// - 规章
 	Route::get('/panel/rules', 'Panel\PanelController@rules');
 	Route::get('/panel/rules/create', 'Panel\PanelController@rulesCreate');
 	Route::post('/panel/rules/store', 'Panel\PanelController@rulesStore');
 	Route::get('/panel/proof', 'Panel\PanelController@proof');
 
+	// - 考勤
 	Route::get('/panel/member/check', 'MemberController@check');
+
+	// - 系统设置
+	Route::get('panel/config', 'Panel\PanelController@config');
+	Route::get('panel/config/work_time', 'WorkTimeController@index');
 
 });
 

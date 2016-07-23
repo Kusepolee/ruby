@@ -47,5 +47,16 @@
     </div>
     {{-- check --}}
 
+    {{-- config --}}
+    <div class="col-md-2 col-sm-4 col-xs-4  wel-grid text-center">
+        <div class="btm-clr"><a href="panel/config">
+            <figure id="tubiao2" class="icon">
+                <span class="tubiao yanse2 glyphicon glyphicon-cog" aria-hidden="true"></span>
+            </figure></a>
+            <h5>系统设置</h5>
+        </div>
+    </div>
+    {{-- config --}}
+
 </div>  	
 @endsection

@@ -317,9 +317,14 @@ class PanelController extends Controller
         return view('panel.proof');
     }
 
+
+    /**
+    * 显示系统设置页面
+    *
+    */
     public function check()
     {
-      return view('js_sdk');
+      return view('panel.config');
     }
 
     /**
