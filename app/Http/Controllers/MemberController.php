@@ -8,6 +8,8 @@ use App\Department;
 use App\Member;
 use App\MemberCheck;
 use App\Position;
+use App\FinanceTrans;
+use App\FinanceOuts;
 use Config;
 use Cookie;
 use FooWeChat\Authorize\Auth;
@@ -469,10 +471,17 @@ class MemberController extends Controller
                     ->select('members.*', 'a.name as created_byName', 'departments.name as departmentName', 'positions.name as positionName')
                     ->find($id);
         if(!count($rec)) return view('errors.404');
+
+        //资金统计
+        $recive = floatval(FinanceTrans::where('tran_to',$id)->sum('tran_amount'));
+        $give = floatval(FinanceTrans::where('tran_from',$id)->sum('tran_amount'));
+        $expend = floatval(FinanceOuts::where('out_user',$id)->sum('out_amount'));
+        $remain = $recive - ($give + $expend);
+
         //日志
         Logie::add(['info', '查看用户资料:'.$rec->work_id.','.$rec->name]);
 
-        return view('member_show', ['rec'=>$rec]);
+        return view('member_show', ['rec'=>$rec, 'recive'=>$recive, 'give'=>$give, 'expend'=>$expend, 'remain'=>$remain]);
     }
 
 

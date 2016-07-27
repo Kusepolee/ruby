@@ -82,6 +82,7 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::post('excel/member', 'ExcelController@getMembers');
 	Route::post('excel/resource', 'ExcelController@getResources');
 	Route::post('excel/finance', 'ExcelController@getFinance');
+	Route::get('excel/personal/{id}', 'ExcelController@personalInfo');
 
 	//Notice 通知
 	Route::post('notice/member', 'NoticeController@member');
@@ -130,6 +131,8 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::get('/panel/rules', 'Panel\PanelController@rules');
 	Route::get('/panel/rules/create', 'Panel\PanelController@rulesCreate');
 	Route::post('/panel/rules/store', 'Panel\PanelController@rulesStore');
+	Route::get('/panel/rules/edit/{id}', 'Panel\PanelController@rulesEdit');
+	Route::post('/panel/rules/update/{id}', 'Panel\PanelController@rulesUpdate');
 	Route::get('/panel/proof', 'Panel\PanelController@proof');
 
 	// - 考勤

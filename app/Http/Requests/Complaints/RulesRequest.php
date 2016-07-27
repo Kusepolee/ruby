@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Resource;
+namespace App\Http\Requests\Complaints;
 
 use App\Http\Requests\Request;
 
-class ResourceSeekRequest extends Request
+class RulesRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +25,9 @@ class ResourceSeekRequest extends Request
     public function rules()
     {
         return [
-            'rescType_val' => 'required|numeric',
-            'department_val' => 'required|numeric',
-            'key' => 'min:1|max:20',
+            'order' => 'required|numeric',
+            'item' => 'min:2|max:20',
+            'content' => 'required|min:2',
         ];
     }
 }
