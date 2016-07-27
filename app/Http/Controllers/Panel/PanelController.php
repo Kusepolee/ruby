@@ -9,6 +9,7 @@ use Session;
 use Input;
 use Image;
 use App\Complaints;
+use App\Rules;
 use App\Member;
 use App\Department;
 use FooWeChat\Authorize\Auth;
@@ -265,14 +266,20 @@ class PanelController extends Controller
     }
 
     /**
-     * 规章制度
+     * 规章制度主页面
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function rules()
     {
-        return view('panel.rules');
+        $id = Session::get('id');
+        $dp = Member::find($id)->department;
+        $recs = Rules::where('dp_id', 2)->get();
+
+        $outs = Rules::where('dp_id', $dp)->get();
+
+        return view('panel.rules', ['recs'=>$recs, 'outs'=>$outs]);
     }
 
     /**
@@ -283,15 +290,8 @@ class PanelController extends Controller
      */
     public function rulesCreate()
     {
-        $recs = Department::where('id', '>', 1)
-              ->get();
-        if(count($recs)){
-          $dp = [];
-          foreach ($recs as $rec) {
-            $dp = array_add($dp, $rec->id, $rec->name);
-          }
-        }
-        return view('panel.rules_create', ['dp'=>$dp]);
+
+        return view('panel.rules_create');
     }
 
     /**
@@ -302,8 +302,39 @@ class PanelController extends Controller
      */
     public function rulesStore(Requests\Complaints\RulesRequest $request)
     {
-        
-        return view('panel.rules');
+        $input = $request->all();
+        Rules::create($input);
+
+        return redirect('panel/rules');
+    }
+
+    /**
+     * 规章制度修改
+     *
+     * @param
+     * @return \Illuminate\Http\Response
+     */
+    public function rulesEdit($id)
+    {
+        $recs = Rules::find($id);
+
+        return view('panel.rules_create', ['rec'=>$recs]);
+    }
+
+    /**
+     * 规章制度更新修改
+     *
+     * @param
+     * @return \Illuminate\Http\Response
+     */
+    public function rulesUpdate(Requests\Complaints\RulesRequest $request, $id)
+    {
+        $rec = Rules::find($id);
+        $update = $request->all();
+        unset($update['_token']);
+        Rules::where('id', $id)->update($update);
+
+        return redirect('panel/rules');
     }
 
     /**

@@ -39,7 +39,7 @@ $h = new FooWeChat\Helpers\Helper;
 					    </ul>
 					  	</ul>
 
-						<h1 class="page-subhead-line">型号: {{ $rec->model }} / 类型: {{ $rec->typeName }} / 创建人: {{ $rec->createByName}} / @if(isset($rec) && $rec->notice !=0 && $rec->alert != 0)
+						<h1 class="page-subhead-line">型号: {{ $rec->model }} / 类型: {{ $rec->typeName }} / 部门: {{ $rec->dpName }} / 创建人: {{ $rec->createByName}} / @if(isset($rec) && $rec->notice !=0 && $rec->alert != 0)
 								@if(isset($rec) && $rec->notice != '' && $rec->notice != null)
 								提醒值: {{ floatval($rec->notice) }}
 								@endif
