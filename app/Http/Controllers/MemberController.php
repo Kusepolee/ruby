@@ -25,9 +25,9 @@ use iscms\Alisms\SendsmsPusher as Sms;
 
 class MemberController extends Controller
 {
-    //protected $departmentsArray;
-    //protected $positionsArray;
-    //protected $key;
+    protected $departmentsArray;
+    protected $positionsArray;
+    protected $key;
 
     /**
      *
