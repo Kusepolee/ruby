@@ -23,6 +23,7 @@ class CreateResoursesTable extends Migration
             $table->decimal('remain', 15, 5)->nullable();
             $table->string('type');
             $table->string('content')->nullable();
+            $table->integer('department');
             $table->integer('level');
             $table->integer('state');
             $table->integer('show');

@@ -6,8 +6,9 @@ $rescType_list  = $h->getRescTypesInUse();
 
 //设置EXCEL查询条件
 count($rescType) ? $rescType_string = implode("|", $rescType) : $rescType_string = '_not';
+count($rescDp) ? $rescDp_string = implode("|", $rescDp) : $rescDp_string = '_not';
 $key != '' && $key != null ? $key_string = $key : $key_string = '_not';
-$full_seek_string = $rescType_string."-".$key_string;
+$full_seek_string = $rescType_string."-".$rescDp_string."-".$key_string;
 ?>
 @extends('head')
 
@@ -21,12 +22,12 @@ $full_seek_string = $rescType_string."-".$key_string;
         <ol class="breadcrumb">
             <li class="active" >资源管理</li>
             <li><a href="/resource/create">添加资源</a></li>
-            @if(count($rescType) || ($key != '' && $key != null))
+            @if(count($rescType) || count($rescDp) || ($key != '' && $key != null))
             <li><a href="/resource">重置查询条件</a></li>
             @endif
         </ol>
             <ul id="myTab" class="nav nav-tabs">
-            @if(count($rescType) || ($key != '' && $key != null))
+            @if(count($rescType) || count($rescDp) || ($key != '' && $key != null))
                 <li class="active"><a href="#resources" data-toggle="tab">查询结果</a>
             @else
                 <li class="active"><a href="#resources" data-toggle="tab">资源</a>
@@ -50,6 +51,7 @@ $full_seek_string = $rescType_string."-".$key_string;
                                         <th>库存</th>
                                         <th>单位</th>                        
                                         <th>类型</th>
+                                        <th>所属部门</th>
                                         <th>提醒值</th>
                                         <th>报警值</th>
                                         <th>创建人</th>
@@ -74,8 +76,9 @@ $full_seek_string = $rescType_string."-".$key_string;
                                             </td>
                                             <td>{{ $out->model }}</td>
                                             <td>{{ floatval($out->remain) }}</td>
-                                            <td>{{ $out->model }}</td>
+                                            <td>{{ $out->unitName }}</td>
                                             <td>{{ $out->typeName }}</td>
+                                            <td>{{ $out->dpName }}</td>
                                             <td>{{ floatval($out->notice) }}</td>
                                             <td>{{ floatval($out->alert) }}</td>
                                             <td>{{ $out->createByName }}</td>
@@ -177,13 +180,20 @@ $full_seek_string = $rescType_string."-".$key_string;
 
                                     {!! Form::open(['url'=>'resource/seek', 'role' => 'form']) !!}
                                 
+                                    <label id="type_label">所属部门</label>
+                                    <div class="form-group">
+
+                                    {!! Form::select('department_val',$department_list, null,['class'=>'form-control']); !!}
+
+                                    </div>
+
                                     <label id="type_label">资源类型</label>
                                     <div class="form-group">
 
                                     {!! Form::select('rescType_val',$rescType_list, null,['class'=>'form-control']); !!}
 
                                     </div>
-                            
+
                                     <p></p>
                                     <div class="form-group">
                                         <label>关键词</label>    

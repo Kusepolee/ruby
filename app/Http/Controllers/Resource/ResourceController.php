@@ -24,6 +24,7 @@ use Session;
 class ResourceController extends Controller
 {
     protected $rescTypesArray;
+    protected $rescDpsArray;
     protected $key;
 
     /**
@@ -35,19 +36,38 @@ class ResourceController extends Controller
     {
         $outs = Resource::where(function ($query) { 
                             if(count($this->rescTypesArray)) $query->whereIn('resources.type', $this->rescTypesArray);
+                            if(count($this->rescDpsArray)) $query->whereIn('resources.department', $this->rescDpsArray);
                             if ($this->key != '' && $this->key != null) {
                                 $query->where('resources.name', 'LIKE', '%'.$this->key.'%');
                             }
                         })
                           ->where('resources.show', 0)
+                          ->orderBy('name')
                           ->orderBy('updated_at', 'desc')
                           ->leftJoin('config as a', 'resources.type', '=', 'a.id')
                           ->leftJoin('config as b', 'resources.unit', '=', 'b.id')
+                          ->leftJoin('departments as c', 'resources.department', '=', 'c.id')
                           ->leftJoin('members', 'resources.createBy', '=', 'members.id')
-                          ->select('resources.*', 'a.name as typeName', 'b.name as unitName', 'members.name as createByName')
+                          ->select('resources.*', 'a.name as typeName', 'b.name as unitName', 'c.name as dpName', 'members.name as createByName')
                           ->paginate(30);
 
-        return view('resource.resource', ['outs'=>$outs, 'rescType'=>$this->rescTypesArray, 'key'=>$this->key]);
+        $departments = Resource::where('resources.show', 0)
+                 ->rightJoin('departments', 'resources.department', '=', 'departments.id')
+                 ->groupBy('resources.department')
+                 ->distinct()
+                 ->select('resources.department', 'departments.name as departmentName')
+                 ->get();
+
+        $arr = [];
+        $arr = ['0'=>'不限部门'];
+
+        if(count($departments)){
+          foreach ($departments as $d) {
+            $arr = array_add($arr, $d->department, $d->departmentName);
+          }
+        }
+
+        return view('resource.resource', ['outs'=>$outs, 'rescType'=>$this->rescTypesArray, 'key'=>$this->key, 'rescDp'=>$this->rescDpsArray, 'department_list'=>$arr]);
     }
 
     /**
@@ -57,7 +77,7 @@ class ResourceController extends Controller
     {
         $seek = $request->all();
 
-        if ($seek['rescType_val'] == 0 && ($seek['key'] =='' || $seek['key'] == null)) {
+        if ($seek['rescType_val'] == 0 && $seek['department_val'] == 0 && ($seek['key'] =='' || $seek['key'] == null)) {
             //go on
         }else{
 
@@ -65,6 +85,16 @@ class ResourceController extends Controller
                 $rescTypes = $seek['rescType_val'];
                 if(count($rescTypes)){
                     $this->rescTypesArray = [$rescTypes];
+                }else{
+                    $arr = ['color'=>'info', 'type'=>'6','code'=>'6.1', 'btn'=>'返回资源管理', 'link'=>'/resource'];
+                    return view('note',$arr);
+                }
+            }
+
+            if($seek['department_val'] != 0) {
+                $rescDps = $seek['department_val'];
+                if(count($rescDps)){
+                    $this->rescDpsArray = [$rescDps];
                 }else{
                     $arr = ['color'=>'info', 'type'=>'6','code'=>'6.1', 'btn'=>'返回资源管理', 'link'=>'/resource'];
                     return view('note',$arr);
@@ -161,7 +191,8 @@ class ResourceController extends Controller
                          ->leftJoin('config as a', 'resources.type', '=', 'a.id')
                          ->leftJoin('config as b', 'resources.unit', '=', 'b.id')
                          ->leftJoin('members', 'resources.createBy', '=', 'members.id')
-                         ->select('resources.*', 'a.name as typeName', 'b.name as unitName', 'members.name as createByName')
+                         ->leftJoin('departments as c', 'resources.department', '=', 'c.id')
+                         ->select('resources.*', 'a.name as typeName', 'b.name as unitName', 'c.name as dpName', 'members.name as createByName')
                          ->find($id);
 
         $remain = $this->getRemain($id);

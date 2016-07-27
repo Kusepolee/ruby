@@ -22,6 +22,7 @@ class ExcelController extends Controller
     protected $departmentsArray;
     protected $positionsArray;
     protected $rescTypesArray;
+    protected $rescDpsArray;
     protected $seekDpArray;
     protected $seekName;
     protected $key;
@@ -126,25 +127,29 @@ class ExcelController extends Controller
         $seek_array = explode('-',$seek_string);
 
         $seek_array[0] != '_not' ? $this->rescTypesArray = explode("|", $seek_array[0]) : $this->rescTypesArray = [];   
-        $seek_array[1] != '_not' ? $this->key = $seek_array[1] : $this->key = '';    
+        $seek_array[1] != '_not' ? $this->rescDpsArray = explode("|", $seek_array[1]) : $this->rescDpsArray = [];   
+        $seek_array[2] != '_not' ? $this->key = $seek_array[2] : $this->key = '';    
 
         
 
         $recs = Resource::where(function ($query) { 
                             if(count($this->rescTypesArray)) $query->whereIn('resources.type', $this->rescTypesArray);
+                            if(count($this->rescDpsArray)) $query->whereIn('resources.department', $this->rescDpsArray);
                             if ($this->key != '' && $this->key != null) {
                                 $query->where('resources.name', 'LIKE', '%'.$this->key.'%');
                             }
                         })
                           ->where('resources.show', 0)
+                          ->orderBy('name')
                           ->orderBy('updated_at', 'DESC')
                           ->leftJoin('config as a', 'resources.type', '=', 'a.id')
                           ->leftJoin('config as b', 'resources.unit', '=', 'b.id')
+                          ->leftJoin('departments as c', 'resources.department', '=', 'c.id')
                           ->leftJoin('members', 'resources.createBy', '=', 'members.id')
-                          ->select('resources.*', 'a.name as typeName', 'b.name as unitName', 'members.name as createByName')
+                          ->select('resources.*', 'a.name as typeName', 'b.name as unitName', 'c.name as dpName', 'members.name as createByName')
                           ->get();
 
-        $data_array = [['编号', '名称', '型号', '库存', '单位', '类型', '提醒值', '报警值', '创建人', '备注']];
+        $data_array = [['编号', '名称', '型号', '库存', '单位', '类型', '所属部门', '提醒值', '报警值', '创建人', '备注']];
 
         if(count($recs)){
             foreach ($recs as $rec) {
@@ -155,6 +160,7 @@ class ExcelController extends Controller
                 $tmp_array[] = floatval($rec->remain);
                 $tmp_array[] = $rec->unitName;
                 $tmp_array[] = $rec->typeName;
+                $tmp_array[] = $rec->dpName;
                 $tmp_array[] = floatval($rec->notice);
                 $tmp_array[] = floatval($rec->alert);
                 $tmp_array[] = $rec->createByName;
@@ -270,6 +276,63 @@ class ExcelController extends Controller
                 $sheet->setAutoSize(true);
                 $sheet->freezeFirstRow();
                 $sheet->rows($data_array2);
+            });
+        })->export('xls');
+    }
+
+    /**
+     * 个人信息(包括财务)
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function personalInfo($id)
+    {
+        $arr = ['position'=>'>=总监', 'department' => '>=运营部'];
+
+        $a = new Auth;
+        if(!$a->auth($arr)){
+            return view('40x',['color'=>'warning', 'type'=>'3', 'code'=>'3.1']);
+        }
+        // ^ 身份验证
+
+        $rec = Member::leftJoin('members as m', 'members.created_by', '=', 'm.id')
+                        ->leftJoin('departments', 'members.department', '=', 'departments.id')
+                        ->leftJoin('positions', 'members.position', '=', 'positions.id')
+                        ->leftJoin('config', 'members.gender', '=', 'config.id')
+                        ->select('members.id', 'members.work_id', 'members.mobile', 'members.position', 'members.department', 'members.name', 'members.email', 'members.weixinid','members.qq', 'members.content', 'members.admin', 'members.state', 'm.name as created_byName', 'departments.name as departmentName', 'positions.name as positionName', 'config.name as genderName')
+                    ->find($id);
+        if(!count($rec)) return view('errors.404');
+
+        $recive = floatval(FinanceTrans::where('tran_to',$id)->sum('tran_amount'));
+        $give = floatval(FinanceTrans::where('tran_from',$id)->sum('tran_amount'));
+        $expend = floatval(FinanceOuts::where('out_user',$id)->sum('out_amount'));
+        $remain = $recive - ($give + $expend);
+        $finance = '余额:'.$remain."\n".'累计收到:'.$recive."\n".'累计给予:'.$give."\n".'累计支出:'.$expend;
+
+        $data_array = [['编号', '姓名', '性别', '部门', '职位', '财务信息', '手机', '邮件', '微信号', 'QQ号', '备注']];
+
+        $tmp_array = [];
+            $tmp_array[] = $rec->work_id;
+            $tmp_array[] = $rec->name;
+            $tmp_array[] = $rec->genderName;
+            $tmp_array[] = $rec->departmentName;
+            $tmp_array[] = $rec->positionName;
+            $tmp_array[] = $finance;
+            $tmp_array[] = '#'.$rec->mobile;
+            $tmp_array[] = $rec->email;
+            $tmp_array[] = $rec->weixinid;
+            $tmp_array[] = '#'.$rec->qq;
+            $tmp_array[] = $rec->content;
+
+        $data_array[] = $tmp_array;
+
+        $name = date("Y-m-d-H-i",time()).'_personal_info';
+
+        Excel::create($name,function($excel) use ($data_array){
+            $excel->sheet('个人资料', function($sheet) use ($data_array){
+                $sheet->setAutoSize(true);
+                $sheet->freezeFirstRow();
+                $sheet->rows($data_array);
             });
         })->export('xls');
     }

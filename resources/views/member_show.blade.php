@@ -74,7 +74,9 @@ END:VCARD';
 	        		@endif 
 
 		<ul class="dropdown-menu" id = "show">
-						@if($a->isSelf($rec->id) || $a->hasRights($rec->id))
+						@if($a->isSelf($rec->id) || $a->hasRights($rec->id) || $a->auth(['user'=>'2', 'position'=>'>=总监', 'department' => '>=运营部']))
+						<li class="m_2"><a href="/excel/personal/{{ $rec->id }}"><i class="glyphicon glyphicon-save-file menu_icon_success"></i> 导出Excel</a></li>
+						<li class="divider"></li>
 						<li class="m_2"><a href="/member/edit/{{ $rec->id }}"><i class="glyphicon glyphicon-edit menu_icon_info"></i> 修改资料 </a></li>
 						@endif
 
@@ -124,101 +126,123 @@ END:VCARD';
 
 				<div class="row">
 
-
-					<div class="col-md-8">
-
-					@if(isset($rec) && $rec->state === 0 && $rec->admin === 0)
-						<div class="alert alert-info" id= "right">
-					@elseif(isset($rec) && $rec->state === 0 && $rec->admin != 0)
-						<div class="alert alert-success" id = "right">
-					@else
-						<div class="alert alert-warning" id= "right">
-					@endif
-							<strong>基本信息:@if(isset($rec) && $rec->admin === 0)
-								(系统管理员)
-							@endif</strong>
-							<p>--------------------</p>
-							<p>编号: {{ $rec->work_id or '编号' }}</p>
-							@if(isset($rec) && $rec->state === 0)
-								<p>账号状态: 正常</p>
-							@else
-								<p>账号状态: 锁定</p>
-							@endif
-
-							@if(isset($rec) && $w->hasFollow($rec->id))
-								<p>微信已关注: 是</p>
-							@else
-								<p>微信已关注: 否</p>
-							@endif
-
-
-							@if(isset($rec) && $rec->mobile != '' && $rec->mobile != null)
-								@if($a->auth(['position'=>'>=经理']) || $a->samePosition($rec->id) || $a->sameDepartment($rec->id))
-								<p>电话: {{ $rec->mobile }}</p>
-								@else 
-								<p>电话: 已保护</p>
-								@endif
-							@endif
-
-							@if(isset($rec) && $rec->email != '' && $rec->email != null)
-								<p>邮件: {{ $rec->email }}</p>
-							@endif
-
-							@if(isset($rec) && $rec->qq != '' && $rec->qq != null)
-								<p>QQ: {{ $rec->qq }}</p>
-							@endif
-
-							@if(isset($rec) && $rec->weixinid != '' && $rec->weixinid != null)
-								<p>微信: {{ $rec->weixinid }}</p>
-							@endif
-
-							@if(isset($rec) && $rec->created_by != '' && $rec->created_by != null)
-
-								@if($rec->created_by === 1)
-									<p>来源: 由系统创建</p>
-								@else
-									<p>来源: 由{{ $rec->created_byName }}在{{ $rec->created_at }}创建</p>
-								@endif
-								
-							@endif
-							
-
-							@if(isset($rec) && $rec->content != '' && $rec->content != null)
-								<p>备注: {{ $rec->content }}</p>
-							@endif
-
+					@if($a->isSelf($rec->id) || $a->hasRights($rec->id) || $a->auth(['user'=>'2', 'position'=>'>=总监', 'department' => '>=运营部']))
+					<div class="col-md-4" id="left">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+					        	<i class="glyphicon glyphicon-yen"></i>&nbsp财务信息:
+					        </div>
+					        <div class="panel-body">
+								<p>余额: ¥ {{ $remain }}</p>
+								<p>累计收到: ¥ {{ $recive }}</p>
+								<p>累计给予: ¥ {{ $give }}</p>
+								<P>累计支出: ¥ {{ $expend }}</P>
+							</div>
 						</div>
 					</div>
 
-					<div class="col-md-4" id ="left">
-				  
-				    <div class="panel panel-info"  >
-				      <div class="panel-heading">
-				        <i class="glyphicon glyphicon-qrcode"></i>&nbsp电子名片: 请使用微信扫描
-				      </div>
-				      <div class="panel-body" style="display:table;margin:10px auto;">
-						{!! QrCode::encoding('UTF-8')->size(230)->generate($vcard);!!}
-				      </div>
-				    </div>
+					<div class="col-md-4" id="middle">
+					@else
+					<div class="col-md-8" id="middle">
+					@endif 
 
-				  </div>
+					@if(isset($rec) && $rec->state === 0 && $rec->admin === 0)
+						<div class="panel panel-info">
+					@elseif(isset($rec) && $rec->state === 0 && $rec->admin != 0)
+						<div class="panel panel-success">
+					@else
+						<div class="panel panel-warning">
+					@endif
+							<div class="panel-heading">
+					        	<i class="glyphicon glyphicon-user"></i>&nbsp基本信息:
+					        </div>
+					        <div class="panel-body">
+								<p>编号: {{ $rec->work_id or '编号' }}</p>
+								@if(isset($rec) && $rec->state === 0)
+									<p>账号状态: 正常</p>
+								@else
+									<p>账号状态: 锁定</p>
+								@endif
+
+								@if(isset($rec) && $w->hasFollow($rec->id))
+									<p>微信已关注: 是</p>
+								@else
+									<p>微信已关注: 否</p>
+								@endif
+
+
+								@if(isset($rec) && $rec->mobile != '' && $rec->mobile != null)
+									@if($a->auth(['position'=>'>=经理']) || $a->samePosition($rec->id) || $a->sameDepartment($rec->id))
+									<p>电话: {{ $rec->mobile }}</p>
+									@else 
+									<p>电话: 已保护</p>
+									@endif
+								@endif
+
+								@if(isset($rec) && $rec->email != '' && $rec->email != null)
+									<p>邮件: {{ $rec->email }}</p>
+								@endif
+
+								@if(isset($rec) && $rec->qq != '' && $rec->qq != null)
+									<p>QQ: {{ $rec->qq }}</p>
+								@endif
+
+								@if(isset($rec) && $rec->weixinid != '' && $rec->weixinid != null)
+									<p>微信: {{ $rec->weixinid }}</p>
+								@endif
+
+								@if(isset($rec) && $rec->created_by != '' && $rec->created_by != null)
+
+									@if($rec->created_by === 1)
+										<p>来源: 由系统创建</p>
+									@else
+										<p>来源: 由{{ $rec->created_byName }}在{{ $rec->created_at }}创建</p>
+									@endif
+									
+								@endif
+								
+
+								@if(isset($rec) && $rec->content != '' && $rec->content != null)
+									<p>备注: {{ $rec->content }}</p>
+								@endif
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4" id="right">
+				        <div class="panel panel-info"  >
+					        <div class="panel-heading">
+					        	<i class="glyphicon glyphicon-qrcode"></i>&nbsp电子名片: 请使用微信扫描
+					        </div>
+				            <div class="panel-body" style="display:table;margin:10px auto;">
+						    {!! QrCode::encoding('UTF-8')->size(230)->generate($vcard);!!}
+				        	</div>
+				    	</div>
+					</div>
+
 				</div>
 			</div>
 		</div>
 	</div>
 
-<script> 
+<!-- <script> 
 $(document).ready(function() { 
-      var r_height=$("#right").height(); 
+      var m_height=$("#middle").height(); 
+      var r_height=$("#right").height();
       var l_height=$("#left").height();
 
-      if(l_height > r_height){
-      	  $("#right").height(l_height-50); 
+      if(r_height > m_height){
+      	  $("#middle").height(r_height-50); 
       }else{
-      	  $("#left").height(r_height);
+      	  $("#right").height(m_height);
+      }
+      if(r_height > l_height){
+      	  $("#left").height(r_height-50); 
+      }else{
+      	  $("#right").height(l_height);
       }
       
 })
-</script>
+</script> -->
 
 @endsection

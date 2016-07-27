@@ -3,7 +3,7 @@ $t = new FooWeChat\Helpers\Helper;
 
 $unit = $t->getSelect('unit');
 $type = $t->getSelect('resourceType');
-
+$dp = $t->getAllDepartments();
 
 ?>
 @extends('head')
@@ -44,6 +44,10 @@ $type = $t->getSelect('resourceType');
 
       <div class="form-group">
           {!! Form::select('type',$type, isset($rec) ? $rec->type : null,['class'=>'form-control']); !!}
+      </div>
+
+      <div class="form-group">
+          {!! Form::select('department',$dp, isset($rec) ? $rec->department : null,['class'=>'form-control']); !!}
       </div>
 
       <div class="form-group">
