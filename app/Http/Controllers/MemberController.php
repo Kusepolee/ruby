@@ -130,6 +130,16 @@ class MemberController extends Controller
 
     public function index()
     {
+      if(!Input::has('page')){
+          Session::forget('member_positions');
+          Session::forget('member_departments');
+          Session::forget('member_key');
+      }
+
+      $this->departmentsArray = Session::get('member_departments', []);
+      $this->positionsArray = Session::get('member_positions', []);
+      $this->key = Session::get('member_key', '');
+
         $outs = Member::where('members.id', '>', 1)
                       ->where(function ($query) { 
                             if(count($this->departmentsArray)) $query->whereIn('members.department', $this->departmentsArray);
@@ -166,33 +176,56 @@ class MemberController extends Controller
 
         if ($seek['dp_val'] == 0 && $seek['pos_val'] == 0 && ($seek['key'] =='' || $seek['key'] == null)) {
             //go on
+          Session::forget('member_positions');
+          Session::forget('member_departments');
+          Session::forget('member_key');
         }else{
             $h = new Helper;
 
             if($seek['dp_val'] != 0) {
                 $departments = $h->getDepartmentsArray($seek['dp_operator'], $seek['dp_val']);
                 if(count($departments)){
-                    $this->departmentsArray = $departments;
+                    //$this->departmentsArray = $departments;
+                    Session::put('member_departments', $departments);
                 }else{
                     $arr = ['color'=>'info', 'type'=>'6','code'=>'6.1', 'btn'=>'返回用户管理', 'link'=>'/member'];
                     return view('note',$arr);
                 }
+            }else{
+                Session::forget('member_departments');
             }
 
             if($seek['pos_val'] != 0) {
                 $positions = $h->getPositionsArray($seek['pos_operator'], $seek['pos_val']);
                 if(count($positions)){
-                    $this->positionsArray = $positions;
+                    //$this->positionsArray = $positions;
+                    Session::put('member_positions', $positions);
                 }else{
                     $arr = ['color'=>'info', 'type'=>'6','code'=>'6.1', 'btn'=>'返回用户管理', 'link'=>'/member'];
                     return view('note',$arr);
                 }
+            }else{
+                Session::forget('member_positions');
             }
 
-            if($seek['key'] != '' && $seek['key'] != null) $this->key= $seek['key'];
+            if($seek['key'] != '' && $seek['key'] != null) {
+              Session::put('member_key', $seek['key']);
+            }else{
+              Session::forget('member_key');
+            }
         }
+        return redirect('/member?page=1');
 
-        return $this->index();
+        //return $this->index();
+    }
+
+    /**
+    *
+    *
+    */
+    public function getSeek()
+    {
+      return redirect('/member?page='.Input::get('page'));
     }
 
     /**

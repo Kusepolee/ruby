@@ -55,6 +55,7 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	//用户
 	Route::get('/member', 'MemberController@index');
 	Route::post('/member/seek', 'MemberController@MemberSeek');
+	Route::get('/member/seek', 'MemberController@getSeek');
 	Route::get('/member/create', 'MemberController@create');
 	Route::post('/member/store', 'MemberController@store');
 	Route::get('/member/show/{id?}', 'MemberController@show');
