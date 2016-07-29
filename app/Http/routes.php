@@ -153,9 +153,15 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 */
 
 
-// Route::get('/test', 'MemberController@initGPS');
-Route::get('/test', function () {
-	return redirect('/finance');
+Route::get('fire', function () {
+    // this fires the event
+    event(new App\Events\MessageEvent());
+    return "event fired";
+});
+
+Route::get('test', function () {
+    // this checks for the event
+    return view('message');
 });
 
 
@@ -188,6 +194,26 @@ Route::get('/test1', function () {
 	echo '</br>'.$d2;
 
 });
+
+
+Route::get('/test3', function () {
+	$string = '';
+	$string1 = null;
+
+	$array = [$string];
+	$array1 = [$string1];
+
+	echo count($array).'</br>';
+	echo count($array1).'</br>';
+
+	if(count($array)) echo "fuck".'</br>';
+	if(count($array1)) echo "fuck1".'</br>';
+	if(!count($array)) echo "yes".'</br>';
+	if(!count($array1)) echo "yes".'</br>';
+});
+
+
+
 
 
 
