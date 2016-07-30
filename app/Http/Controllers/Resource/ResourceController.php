@@ -528,7 +528,7 @@ class ResourceController extends Controller
         $notice = $rec->notice;
         $alert = $rec->alert;
 
-        if($notice != 0 && $alert != 0){
+        if($rec->type != 3){
             if($remain<=0) $state = 0;
             elseif($remain<=$alert && $remain>0) $state = 1;
             elseif($remain<=$notice && $remain>$alert) $state = 2;
