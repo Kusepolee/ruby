@@ -5,8 +5,8 @@ $h = new FooWeChat\Helpers\Helper;
 $rescType_list  = $h->getRescTypesInUse();
 
 //设置EXCEL查询条件
-count($rescType) ? $rescType_string = implode("|", $rescType) : $rescType_string = '_not';
-count($rescDp) ? $rescDp_string = implode("|", $rescDp) : $rescDp_string = '_not';
+$rescType != 0 ? $rescType_string = $rescType : $rescType_string = '_not';
+$rescDp != 0 ? $rescDp_string = $rescDp : $rescDp_string = '_not';
 $key != '' && $key != null ? $key_string = $key : $key_string = '_not';
 $full_seek_string = $rescType_string."-".$rescDp_string."-".$key_string;
 ?>
@@ -22,12 +22,12 @@ $full_seek_string = $rescType_string."-".$rescDp_string."-".$key_string;
         <ol class="breadcrumb">
             <li class="active" >资源管理</li>
             <li><a href="/resource/create">添加资源</a></li>
-            @if(count($rescType) || count($rescDp) || ($key != '' && $key != null))
+            @if($rescType != 0 || $rescDp != 0 || ($key != '' && $key != null))
             <li><a href="/resource">重置查询条件</a></li>
             @endif
         </ol>
             <ul id="myTab" class="nav nav-tabs">
-            @if(count($rescType) || count($rescDp) || ($key != '' && $key != null))
+            @if($rescType != 0 || $rescDp != 0 || ($key != '' && $key != null))
                 <li class="active"><a href="#resources" data-toggle="tab">查询结果</a>
             @else
                 <li class="active"><a href="#resources" data-toggle="tab">资源</a>

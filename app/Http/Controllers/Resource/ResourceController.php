@@ -23,8 +23,8 @@ use Session;
 
 class ResourceController extends Controller
 {
-    protected $rescTypesArray;
-    protected $rescDpsArray;
+    protected $rescType;
+    protected $rescDp;
     protected $key;
 
     /**
@@ -34,9 +34,19 @@ class ResourceController extends Controller
      */
     public function index()
     {
+        if(!Input::has('page')){
+            Session::forget('resource_types');
+            Session::forget('resource_departments');
+            Session::forget('resource_key');
+        }
+
+        $this->rescType = Session::get('resource_types', '');
+        $this->rescDp = Session::get('resource_departments', '');
+        $this->key = Session::get('resource_key', '');
+
         $outs = Resource::where(function ($query) { 
-                            if(count($this->rescTypesArray)) $query->whereIn('resources.type', $this->rescTypesArray);
-                            if(count($this->rescDpsArray)) $query->whereIn('resources.department', $this->rescDpsArray);
+                            if($this->rescType != 0) $query->where('resources.type', $this->rescType);
+                            if($this->rescDp != 0) $query->where('resources.department', $this->rescDp);
                             if ($this->key != '' && $this->key != null) {
                                 $query->where('resources.name', 'LIKE', '%'.$this->key.'%');
                             }
@@ -67,7 +77,7 @@ class ResourceController extends Controller
           }
         }
 
-        return view('resource.resource', ['outs'=>$outs, 'rescType'=>$this->rescTypesArray, 'key'=>$this->key, 'rescDp'=>$this->rescDpsArray, 'department_list'=>$arr]);
+        return view('resource.resource', ['outs'=>$outs, 'rescType'=>$this->rescType, 'key'=>$this->key, 'rescDp'=>$this->rescDp, 'department_list'=>$arr]);
     }
 
     /**
@@ -79,32 +89,56 @@ class ResourceController extends Controller
 
         if ($seek['rescType_val'] == 0 && $seek['department_val'] == 0 && ($seek['key'] =='' || $seek['key'] == null)) {
             //go on
+            Session::forget('resource_types');
+            Session::forget('resource_departments');
+            Session::forget('resource_key');
+
         }else{
 
             if($seek['rescType_val'] != 0) {
                 $rescTypes = $seek['rescType_val'];
                 if(count($rescTypes)){
-                    $this->rescTypesArray = [$rescTypes];
+                    // $this->rescType = [$rescTypes];
+                    Session::put('resource_types', $rescTypes);
                 }else{
                     $arr = ['color'=>'info', 'type'=>'6','code'=>'6.1', 'btn'=>'返回资源管理', 'link'=>'/resource'];
                     return view('note',$arr);
                 }
+            }else{
+                Session::forget('resource_types');
             }
 
             if($seek['department_val'] != 0) {
                 $rescDps = $seek['department_val'];
                 if(count($rescDps)){
-                    $this->rescDpsArray = [$rescDps];
+                    // $this->rescDp = [$rescDps];
+                    Session::put('resource_departments', $rescDps);
                 }else{
                     $arr = ['color'=>'info', 'type'=>'6','code'=>'6.1', 'btn'=>'返回资源管理', 'link'=>'/resource'];
                     return view('note',$arr);
                 }
+            }else{
+                Session::forget('resource_departments');
             }
 
-            if($seek['key'] != '' && $seek['key'] != null) $this->key= $seek['key'];
+            if($seek['key'] != '' && $seek['key'] != null) {
+                // $this->key= $seek['key'];
+                Session::put('resource_key', $seek['key']);
+            }else{
+                Session::forget('resource_key');
+            }
         }
        
-        return $this->index();       
+        return redirect('/resource?page=1');       
+    }
+
+    /**
+    *
+    *
+    */
+    public function getSeek()
+    {
+      return redirect('/resource?page='.Input::get('page'));
     }
     
     /**
