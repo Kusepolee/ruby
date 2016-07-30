@@ -21,10 +21,10 @@ class ExcelController extends Controller
 {
     protected $departmentsArray;
     protected $positionsArray;
-    protected $rescTypesArray;
-    protected $rescDpsArray;
-    protected $seekDpArray;
-    protected $seekName;
+    protected $rescType;
+    protected $rescDp;
+    protected $fncDp;
+    protected $fncName;
     protected $key;
     /**
      * 获取用户信息: 员工
@@ -126,15 +126,15 @@ class ExcelController extends Controller
         $seek_string = $request->seek_string;
         $seek_array = explode('-',$seek_string);
 
-        $seek_array[0] != '_not' ? $this->rescTypesArray = explode("|", $seek_array[0]) : $this->rescTypesArray = [];   
-        $seek_array[1] != '_not' ? $this->rescDpsArray = explode("|", $seek_array[1]) : $this->rescDpsArray = [];   
+        $seek_array[0] != '_not' ? $this->rescType = $seek_array[0] : $this->rescType = '';   
+        $seek_array[1] != '_not' ? $this->rescDp = $seek_array[1] : $this->rescDp = '';   
         $seek_array[2] != '_not' ? $this->key = $seek_array[2] : $this->key = '';    
 
         
 
         $recs = Resource::where(function ($query) { 
-                            if(count($this->rescTypesArray)) $query->whereIn('resources.type', $this->rescTypesArray);
-                            if(count($this->rescDpsArray)) $query->whereIn('resources.department', $this->rescDpsArray);
+                            if($this->rescType != 0) $query->where('resources.type', $this->rescType);
+                            if($this->rescDp != 0) $query->where('resources.department', $this->rescDp);
                             if ($this->key != '' && $this->key != null) {
                                 $query->where('resources.name', 'LIKE', '%'.$this->key.'%');
                             }
@@ -149,7 +149,7 @@ class ExcelController extends Controller
                           ->select('resources.*', 'a.name as typeName', 'b.name as unitName', 'c.name as dpName', 'members.name as createByName')
                           ->get();
 
-        $data_array = [['编号', '名称', '型号', '库存', '单位', '类型', '所属部门', '提醒值', '报警值', '创建人', '备注']];
+        $data_array = [['编号', '名称', '型号', '库存', '单位', '类型', '所属部门', '提醒值', '报警值', '备注']];
 
         if(count($recs)){
             foreach ($recs as $rec) {
@@ -163,7 +163,6 @@ class ExcelController extends Controller
                 $tmp_array[] = $rec->dpName;
                 $tmp_array[] = floatval($rec->notice);
                 $tmp_array[] = floatval($rec->alert);
-                $tmp_array[] = $rec->createByName;
                 $tmp_array[] = $rec->content;
 
                 $data_array[] = $tmp_array;
@@ -202,12 +201,12 @@ class ExcelController extends Controller
         $seek_string = $request->seek_string;
         $seek_array = explode('-',$seek_string);
 
-        $seek_array[0] != '_not' ? $this->seekDpArray = explode("|", $seek_array[0]) : $this->seekDpArray = [];   
-        $seek_array[1] != '_not' ? $this->seekNameArray = explode("|", $seek_array[1]) : $this->seekNameArray = [];    
+        $seek_array[0] != '_not' ? $this->fncDp = $seek_array[0] : $this->fncDp = '';   
+        $seek_array[1] != '_not' ? $this->fncName = $seek_array[1] : $this->fncName = '';    
 
         $outs = FinanceOuts::where(function ($query) { 
-                                if(count($this->seekDpArray)) $query->whereIn('finance_outs.out_about', $this->seekDpArray);
-                                if(count($this->seekNameArray)) $query->whereIn('finance_outs.out_user', $this->seekNameArray);
+                                if($this->fncDp != 0) $query->where('finance_outs.out_about', $this->fncDp);
+                                if($this->fncName != 0) $query->where('finance_outs.out_user', $this->fncName);
                             })
                             ->orderBy('out_date', 'desc')
                             ->orderBy('created_at', 'desc')
@@ -217,8 +216,8 @@ class ExcelController extends Controller
                             ->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName', 'a.name as userName')
                             ->get();
             $trans = FinanceTrans::where(function ($query) { 
-                                if(count($this->seekNameArray)) $query->whereIn('finance_trans.tran_from', $this->seekNameArray)
-                                                                    ->orwhereIn('finance_trans.tran_to', $this->seekNameArray);
+                                if($this->fncName != 0) $query->where('finance_trans.tran_from', $this->fncName)
+                                                                    ->orwhere('finance_trans.tran_to', $this->fncName);
                             })
                             ->orderBy('tran_date', 'desc')
                             ->orderBy('created_at', 'desc')

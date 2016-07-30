@@ -8,6 +8,7 @@ use App\FinanceTrans;
 use App\Member;
 use App\Department;
 use Session;
+use Input;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use FooWeChat\Authorize\Auth;
@@ -17,8 +18,8 @@ use FooWeChat\Selector\Select;
 
 class FinanceController extends Controller
 {
-	protected $seekDpArray;
-	protected $seekNameArray;
+	protected $fncDp;
+	protected $fncName;
 
 	/*
 	 *财务首页
@@ -27,11 +28,19 @@ class FinanceController extends Controller
 	 */
 	public function index()
 	{
+		if(!Input::has('page') && !Input::has('p')){
+            Session::forget('finance_departments');
+            Session::forget('finance_name');
+        }
+
+        $this->fncDp = Session::get('finance_departments', '');
+        $this->fncName = Session::get('finance_name', '');
+
 		$a = new Auth;
 		if($a->auth(['admin'=>'no', 'position'=>'>=总监', 'department'=>'>=运营部|资源部'])){
 			$outs = FinanceOuts::where(function ($query) { 
-	                            if(count($this->seekDpArray)) $query->whereIn('finance_outs.out_about', $this->seekDpArray);
-	                            if(count($this->seekNameArray)) $query->whereIn('finance_outs.out_user', $this->seekNameArray);
+	                            if($this->fncDp != 0) $query->where('finance_outs.out_about', $this->fncDp);
+	                            if($this->fncName != 0) $query->where('finance_outs.out_user', $this->fncName);
 	                        })
 							->orderBy('out_date', 'desc')
 							->orderBy('created_at', 'desc')
@@ -41,8 +50,8 @@ class FinanceController extends Controller
 							->select('finance_outs.*', 'config.name as outBill', 'departments.name as dpName', 'a.name as userName')
 							->paginate(50);
 			$trans = FinanceTrans::where(function ($query) { 
-	                            if(count($this->seekNameArray)) $query->whereIn('finance_trans.tran_from', $this->seekNameArray)
-	                            									->orwhereIn('finance_trans.tran_to', $this->seekNameArray);
+	                            if($this->fncName != 0) $query->where('finance_trans.tran_from', $this->fncName)
+	                            									->orwhere('finance_trans.tran_to', $this->fncName);
 	                        })
 							->orderBy('tran_date', 'desc')
 							->orderBy('created_at', 'desc')
@@ -59,10 +68,11 @@ class FinanceController extends Controller
 			$user_dp = Member::find($id)->department;
 			$user = Session::get('name');
 			$outs = FinanceOuts::where(function ($query) { 
-	                            if(count($this->seekDpArray)) $query->whereIn('finance_outs.out_about', $this->seekDpArray);
-	                            if(count($this->seekNameArray)) $query->whereIn('finance_outs.out_user', $this->seekNameArray);
+	                            if($this->fncDp != 0) $query->where('finance_outs.out_about', $this->fncDp);
+	                            if($this->fncName != 0) $query->where('finance_outs.out_user', $this->fncName);
 	                        })
-							->where('out_about', $user_dp)
+							->where('out_user', $id)
+							->orwhere('out_about', $user_dp)
 							->orderBy('out_date', 'desc')
 							->orderBy('created_at', 'desc')
 							->leftjoin('departments', 'finance_outs.out_about', '=', 'departments.id')
@@ -75,8 +85,8 @@ class FinanceController extends Controller
 				$name = $rec->name;
 			}
 			$trans = FinanceTrans::where(function ($query) { 
-	                            if(count($this->seekNameArray)) $query->whereIn('finance_trans.tran_from', $this->seekNameArray)
-	                            									->orwhereIn('finance_trans.tran_to', $this->seekNameArray);
+	                            if($this->fncName != 0) $query->where('finance_trans.tran_from', $this->fncName)
+	                            									->orwhere('finance_trans.tran_to', $this->fncName);
 	                        })
 							->whereIn('tran_to', [$name, $id])
 							->orwhere('tran_from', $id)
@@ -112,6 +122,9 @@ class FinanceController extends Controller
 
 		}
 
+		// var_dump($outs);
+		// exit;
+
 		$departments = Department::where('id', '>', 1)
 					->get();
 		if(count($departments)){
@@ -130,8 +143,69 @@ class FinanceController extends Controller
 			}
 		}
 		
-		return view('finance.finance', ['seekName'=>$this->seekNameArray, 'seekDp'=>$this->seekDpArray, 'outs'=>$outs, 'trans'=>$trans, 'Dp'=>$dp, 'Mb'=>$mb]);
+		return view('finance.finance', ['seekName'=>$this->fncName, 'seekDp'=>$this->fncDp, 'outs'=>$outs, 'trans'=>$trans, 'Dp'=>$dp, 'Mb'=>$mb]);
 	}
+
+	/**
+    * 查询
+    */
+    public function financeSeek(Requests\Finance\FinanceSeekRequest $request)
+    {
+        $seek = $request->all();
+        // var_dump($seek);
+        // exit;
+
+        if ($seek['seekDp'] == 0 && ($seek['seekName'] =='' || $seek['seekName'] == 0 && $seek['seekName'] == '')) {
+            //go on
+            Session::forget('finance_departments');
+            Session::forget('finance_name');
+        }else{
+
+            if($seek['seekDp'] != 0) {
+                $seekDp = $seek['seekDp'];
+                if($seekDp != 0){
+                    // $this->fncDp = [$seekDp];
+                    Session::put('finance_departments', $seekDp);
+                }else{
+                    $arr = ['color'=>'info', 'type'=>'6','code'=>'6.1', 'btn'=>'返回资源管理', 'link'=>'/resource'];
+                    return view('note',$arr);
+                }
+            }else{
+            	Session::forget('finance_departments');
+            }
+
+            if($seek['seekName'] != 0) {
+                $seekName = $seek['seekName'];
+                if($seekName != 0){
+                    // $this->fncName = [$seekName];
+                    Session::put('finance_name', $seekName);
+                }else{
+                    $arr = ['color'=>'info', 'type'=>'6','code'=>'6.1', 'btn'=>'返回资源管理', 'link'=>'/resource'];
+                    return view('note',$arr);
+                }
+            }else{
+            	Session::forget('finance_name');
+            }
+
+        }
+       
+        // return $this->index(); 
+        return redirect('/finance?page=1&p=1');      
+    }
+
+    /**
+    *
+    *
+    */
+    public function getSeek()
+    {
+	    if(Input::has('page')){
+	  		return redirect('/finance?page='.Input::get('page'));
+	  	}
+	  	elseif(Input::has('p')){
+	    	return redirect('/finance?p='.Input::get('p'));
+		}
+    }
 
 	/**
 	* 支出页面
@@ -320,42 +394,5 @@ class FinanceController extends Controller
         $w->sendText($s->select($array), $body);
 
     	return redirect('/finance/trans/note/'.$id);
-    }
-
-	/**
-    * 查询
-    */
-    public function financeSeek(Requests\Finance\FinanceSeekRequest $request)
-    {
-        $seek = $request->all();
-
-        if ($seek['seekDp'] == 0 && ($seek['seekName'] =='' || $seek['seekName'] == 0 && $seek['seekName'] == '')) {
-            //go on
-        }else{
-
-            if($seek['seekDp'] != 0) {
-                $seekDp = $seek['seekDp'];
-                if(count($seekDp)){
-                    $this->seekDpArray = [$seekDp];
-                }else{
-                    $arr = ['color'=>'info', 'type'=>'6','code'=>'6.1', 'btn'=>'返回资源管理', 'link'=>'/resource'];
-                    return view('note',$arr);
-                }
-            }
-
-            if($seek['seekName'] != 0) {
-                $seekName = $seek['seekName'];
-                if(count($seekName)){
-                    $this->seekNameArray = [$seekName];
-                }else{
-                    $arr = ['color'=>'info', 'type'=>'6','code'=>'6.1', 'btn'=>'返回资源管理', 'link'=>'/resource'];
-                    return view('note',$arr);
-                }
-            }
-
-            if($seek['seekName'] != '' && $seek['seekName'] != null) $this->seekName= $seek['seekName'];
-        }
-       
-        return $this->index();       
     }
 } 

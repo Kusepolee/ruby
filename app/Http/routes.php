@@ -93,6 +93,7 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::get('/resource/create', 'Resource\ResourceController@create');
 	Route::post('/resource/store', 'Resource\ResourceController@store');
 	Route::post('/resource/seek', 'Resource\ResourceController@resourceSeek');
+	Route::get('/resource/seek', 'Rsource\ResourceController@getSeek');
 	Route::get('/resource/show/{id}', 'Resource\ResourceController@show');
 	Route::get('/resource/edit/{id}', 'Resource\ResourceController@edit');
 	Route::post('/resource/update/{id}', 'Resource\ResourceController@update');
@@ -117,6 +118,7 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::get('/finance/trans/show/{id}', 'Finance\FinanceController@tranShow');
 	Route::get('/finance/trans/confirm/{id}', 'Finance\FinanceController@tranConfirm');
 	Route::post('/finance/seek', 'Finance\FinanceController@financeSeek');
+	Route::get('/finance/seek', 'Finance\FinanceController@getSeek');
 
 	/*--- 面版 ---*/
 	// -投诉

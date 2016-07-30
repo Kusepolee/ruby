@@ -3,8 +3,8 @@
 	$h = new FooWeChat\Helpers\Helper;
     $id = Session::get('id');
 
-    count($seekDp) ? $seekDp_string = implode("|", $seekDp) : $seekDp_string = '_not';
-    count($seekName) ? $seekName_string = implode("|", $seekName) : $seekName_string = '_not';
+    $seekDp != 0 ? $seekDp_string = $seekDp : $seekDp_string = '_not';
+    $seekName != 0 ? $seekName_string = $seekName : $seekName_string = '_not';
     $full_seek_string = $seekDp_string."-".$seekName_string;
 ?>
 @extends('head')
@@ -16,13 +16,13 @@
     <ol class="breadcrumb">
         <li class="active" >财务</li>
         <li><a href="/finance/outs">支出</a></li>
-        @if(count($seekDp) || count($seekName))
+        @if($seekDp != 0 || $seekName != 0)
         <li><a href="/finance">重置查询条件</a></li>
         @endif
     </ol>
         <ul id="myTab" class="nav nav-tabs">
-        @if(count($seekDp) || count($seekName))
-            @if(Input::has('p'))
+        @if($seekDp != 0 || $seekName != 0)
+            @if(Input::has('p') && !Input::has('page'))
             <li class=""><a href="#outs" data-toggle="tab">支出</a>
             <li class="active"><a href="#trans" data-toggle="tab">流向</a>
             @else
@@ -30,7 +30,7 @@
             <li class=""><a href="#trans" data-toggle="tab">流向</a>
             @endif
         @else
-            @if(Input::has('p'))
+            @if(Input::has('p') && !Input::has('page'))
             <li class=""><a href="#outs" data-toggle="tab">支出</a>
             <li class="active"><a href="#trans" data-toggle="tab">流向</a>
             @else
@@ -46,7 +46,7 @@
         </ul>
         <div id="myTabContent" class="tab-content">
             <!-- outs list -->
-            @if(Input::has('p'))
+            @if(Input::has('p') && !Input::has('page'))
             <div class="tab-pane fade" id="outs">
             @else
             <div class="tab-pane fade active in" id="outs">
@@ -105,7 +105,7 @@
             </div>
             <!-- end of outs list -->
             <!-- trans list -->
-            @if(Input::has('p'))
+            @if(Input::has('p')&& !Input::has('page'))
             <div class="tab-pane fade active in" id="trans">
             @else
             <div class="tab-pane fade" id="trans">
