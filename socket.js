@@ -42,7 +42,7 @@ redis.on('message', function(channel, message) {
     message = JSON.parse(message);
     io.emit(channel + ':' + message.event, message.data);
 });
-https.listen(3000, function(){
+http.listen(3000, function(){
     console.log('Listening on Port 3000');
 });
 
