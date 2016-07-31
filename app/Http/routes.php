@@ -166,17 +166,6 @@ Route::get('test', function () {
     return view('message');
 });
 
-
-Route::get('/test2', function () {
-	$url = Input::get('p');
-
-	if(Input::has('p')){
-		echo "fuck";
-	}else{
-		echo "good";
-	}
-});
-
 Route::get('/test1', function () {
 	$x1 = 34.12757;
 	$y1 = 118.8945;
