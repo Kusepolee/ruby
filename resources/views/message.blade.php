@@ -1,6 +1,7 @@
 <?php
 $h = new FooWeChat\Helpers\Helper;
 $socket = $h->app('ssl').'://'.$h->custom('url').':3000';
+if($h->app('ssl') == 'https') $socket .= ', {secure: true}';
 ?>
 @extends('head')
 
