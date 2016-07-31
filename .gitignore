@@ -22,10 +22,11 @@ public/bower_components/
 
 #config files
 config/restrose.*
-socket.js
 
 #ico
 public/favicon.*
 
 #custom
 public/custom/
+
+socket.js
