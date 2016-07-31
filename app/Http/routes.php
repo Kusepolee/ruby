@@ -198,23 +198,6 @@ Route::get('/test1', function () {
 });
 
 
-Route::get('/test3', function () {
-	$string = '';
-	$string1 = null;
-
-	$array = [$string];
-	$array1 = [$string1];
-
-	echo count($array).'</br>';
-	echo count($array1).'</br>';
-
-	if(count($array)) echo "fuck".'</br>';
-	if(count($array1)) echo "fuck1".'</br>';
-	if(!count($array)) echo "yes".'</br>';
-	if(!count($array1)) echo "yes".'</br>';
-});
-
-
 
 
 
