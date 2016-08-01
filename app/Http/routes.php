@@ -166,17 +166,6 @@ Route::get('test', function () {
     return view('message');
 });
 
-
-Route::get('/test2', function () {
-	$url = Input::get('p');
-
-	if(Input::has('p')){
-		echo "fuck";
-	}else{
-		echo "good";
-	}
-});
-
 Route::get('/test1', function () {
 	$x1 = 34.12757;
 	$y1 = 118.8945;
@@ -195,23 +184,6 @@ Route::get('/test1', function () {
 
 	echo '</br>'.$d2;
 
-});
-
-
-Route::get('/test3', function () {
-	$string = '';
-	$string1 = null;
-
-	$array = [$string];
-	$array1 = [$string1];
-
-	echo count($array).'</br>';
-	echo count($array1).'</br>';
-
-	if(count($array)) echo "fuck".'</br>';
-	if(count($array1)) echo "fuck1".'</br>';
-	if(!count($array)) echo "yes".'</br>';
-	if(!count($array1)) echo "yes".'</br>';
 });
 
 
