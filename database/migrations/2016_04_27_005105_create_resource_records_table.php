@@ -22,6 +22,7 @@ class CreateResourceRecordsTable extends Migration
             $table->integer('to')->nullable();
             $table->integer('for');
             $table->string('content')->nullable();
+            $table->integer('department');
             $table->string('token')->nullable();
             $table->timestamps();
         });
