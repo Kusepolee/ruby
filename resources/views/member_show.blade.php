@@ -128,7 +128,7 @@ END:VCARD';
 
 					@if($a->isSelf($rec->id) || $a->hasRights($rec->id) || $a->auth(['user'=>'2', 'position'=>'>=总监', 'department' => '>=运营部']))
 					<div class="col-md-4" id="left">
-						<div class="panel panel-info">
+						<div class="panel panel-warning">
 							<div class="panel-heading">
 					        	<i class="glyphicon glyphicon-yen"></i>&nbsp财务信息:
 					        </div>
