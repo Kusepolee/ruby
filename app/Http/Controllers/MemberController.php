@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Input;
 use Logie;
 use Session;
+use Storage;
 use iscms\Alisms\SendsmsPusher as Sms;
 
 class MemberController extends Controller
@@ -787,7 +788,7 @@ class MemberController extends Controller
         $input = $request->all();
         $base64 = $input['base64'];
         $base64_body = substr(strstr($base64,','),1);
-        $png= base64_decode($base64_body );
+        $png= base64_decode($base64_body);
 
         if($id === 0) $id = Session::get('id');
         $target = Member::find($id);
@@ -797,9 +798,12 @@ class MemberController extends Controller
         $base_path_img =  base_path().'/public/upload/member/';
         $path = $base_path_img.$png_name;
 
-        file_put_contents($path, $png);
+        
 
-        if($target->img != '' && $target->img != null) unlink($base_path_img.$target->img);
+        if($target->img != '' && $target->img != null && Storage::exists($base_path_img.$target->img)) unlink($base_path_img.$target->img);
+        
+        file_put_contents($path, $png);
+        //Storage::put($base_path_img.$png_name);
 
         $target->update(['img'=>$png_name]);
 
