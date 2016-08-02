@@ -275,11 +275,27 @@ class PanelController extends Controller
     {
         $id = Session::get('id');
         $dp = Member::find($id)->department;
-        $recs = Rules::where('dp_id', 2)->get();
+        $dp_name = Department::find($dp)->name;
 
-        $outs = Rules::where('dp_id', $dp)->get();
+        $departments = Rules::where('dp_id', '>', 2)
+                     ->rightJoin('departments', 'rules.dp_id', '=', 'departments.id')
+                     ->groupBy('rules.dp_id')
+                     ->distinct()
+                     ->select('rules.dp_id', 'departments.name as departmentName')
+                     ->get();
+        $dps = [];
+        if(count($departments)){
+            foreach ($departments as $d) {
+                $dps = array_add($dps, $d->dp_id, $d->departmentName);
+            }
+        }
+        
+        $firsts = Rules::where('dp_id', 2)->get();
+        $recs = Rules::where('dp_id', '>', 2)->get();
+        $groups = $recs->groupBy('dp_id');
+        $groups->toArray();
 
-        return view('panel.rules', ['recs'=>$recs, 'outs'=>$outs]);
+        return view('panel.rules', ['firsts'=>$firsts, 'dp'=>$dp, 'dp_name'=>$dp_name, 'dps'=>$dps,'groups'=>$groups]);
     }
 
     /**
