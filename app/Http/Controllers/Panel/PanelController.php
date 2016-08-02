@@ -306,6 +306,12 @@ class PanelController extends Controller
      */
     public function rulesCreate()
     {
+        $arr = ['position' => '>=总监', 'department' => '>=运营部'];
+        $a = new Auth;
+        if(!$a->auth($arr)){
+            return view('40x',['color'=>'warning', 'type'=>'3', 'code'=>'3.1']);
+            exit;
+        }
 
         return view('panel.rules_create');
     }
@@ -332,6 +338,13 @@ class PanelController extends Controller
      */
     public function rulesEdit($id)
     {
+        $arr = ['position' => '>=总监', 'department' => '>=运营部'];
+        $a = new Auth;
+        if(!$a->auth($arr)){
+            return view('40x',['color'=>'warning', 'type'=>'3', 'code'=>'3.1']);
+            exit;
+        }
+        
         $recs = Rules::find($id);
 
         return view('panel.rules_create', ['rec'=>$recs]);
