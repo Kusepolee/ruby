@@ -16,7 +16,6 @@ class CreateCustomerUserTable extends Migration
             $table->increments('id');
             $table->integer('customer_id'); //用户
             $table->string('name'); //姓名
-            $table->string('fuck'); //姓名
             $table->string('password'); //密码
             $table->integer('gender')->nullable(); //性别 
             $table->string('department'); //部门
