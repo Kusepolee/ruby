@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Complaints;
+namespace App\Http\Requests\Panel;
 
 use App\Http\Requests\Request;
 
-class ComplaintsRequest extends Request
+class DeliveryRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +25,11 @@ class ComplaintsRequest extends Request
     public function rules()
     {
         return [
-            'type' => 'required',
-            'target' => 'required',
-            'content' => 'required|max:200',
+            'name' => 'required',
+            'amount' => 'required|numeric',
+            'sender' => 'required',
+            'receiver' => 'required',
+            'company' => 'required',
         ];
     }
 }

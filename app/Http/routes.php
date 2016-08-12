@@ -106,6 +106,10 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	// Route::get('/resource/list/{id}', 'Resource\ResourceController@getList');
 	Route::get('/resource/image/set/{id}', 'Resource\ResourceController@image');
 	Route::post('/resource/image/store/{id?}', 'Resource\ResourceController@imageStore');
+
+	//产品
+	Route::get('/product', 'Product\ProductController@index');
+	Route::get('/product/create', 'Product\ProductController@create');
 	
 	//财务
 	Route::get('/finance', 'Finance\FinanceController@index');
@@ -121,8 +125,15 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::get('/finance/seek', 'Finance\FinanceController@getSeek');
 
 	/*--- 面版 ---*/
-	// -投诉
 	Route::get('/panel', 'Panel\PanelController@index');
+	
+	// -  发货记录
+	Route::get('/panel/delivery', 'Panel\PanelController@delivery');
+	Route::get('/panel/delivery/create', 'Panel\PanelController@deliveryCreate');
+	Route::post('/panel/delivery/store', 'Panel\PanelController@deliveryStore');
+	Route::get('/panel/delivery/show/{id}', 'Panel\PanelController@deliveryShow');
+
+	// - 投诉
 	Route::get('/panel/complaints', 'Panel\PanelController@complaints');
 	Route::post('/panel/complaints/store', 'Panel\PanelController@complaintsStore');
 	Route::get('/panel/complaints/image/set/{id}', 'Panel\PanelController@image');

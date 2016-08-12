@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Complaints;
+namespace App\Http\Requests\Panel;
 
 use App\Http\Requests\Request;
 

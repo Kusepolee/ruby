@@ -8,7 +8,7 @@ $a = new FooWeChat\Authorize\Auth;
 
 <div class="container">
     <ol class="breadcrumb">
-        <li><a href="/panel" class="btn btn-xs btn-info">返回工作面版</a></li>
+        <li><a href="/panel" class="btn btn-xs btn-info">返回面版</a></li>
         <li><a href="/panel/rules/create" >新建</a></li>
     </ol>
 	<div class="row">

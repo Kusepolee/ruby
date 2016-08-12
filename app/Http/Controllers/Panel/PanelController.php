@@ -9,6 +9,7 @@ use Session;
 use Input;
 use Image;
 use App\Complaints;
+use App\Delivery;
 use App\Rules;
 use App\Member;
 use App\Department;
@@ -47,7 +48,7 @@ class PanelController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function complaintsStore(Requests\Complaints\ComplaintsRequest $request)
+    public function complaintsStore(Requests\Panel\ComplaintsRequest $request)
     {
         $input = $request->all();
         $input['state'] = 0;
@@ -126,7 +127,7 @@ class PanelController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function imageStore(Requests\Complaints\ImageRequest $request)
+    public function imageStore(Requests\Panel\ImageRequest $request)
     {
         $file = Input::file('pic');
         $image = $file->getRealPath();
@@ -266,6 +267,104 @@ class PanelController extends Controller
     }
 
     /**
+     * 发货记录主页面
+     *
+     */
+    public function delivery()
+    {
+        $arr = ['position' => '>=经理', 'department' => '>=资源部'];
+        $a = new Auth;
+        if(!$a->auth($arr)){
+            return view('40x',['color'=>'warning', 'type'=>'3', 'code'=>'3.1']);
+            exit;
+        }
+
+        $outs = Delivery::orderBy('name')
+                          ->orderBy('date', 'desc')
+                          ->orderBy('created_at', 'desc')
+                          ->leftJoin('config as b', 'delivery.unit', '=', 'b.id')
+                          ->leftJoin('members', 'delivery.created_by', '=', 'members.id')
+                          ->select('delivery.*', 'b.name as unitName', 'members.name as createByName')
+                          ->paginate(30);
+
+        return view('panel.delivery', ['outs'=>$outs]);
+    }
+
+    /**
+     * 新建发货记录
+     *
+     */
+    public function deliveryCreate()
+    {
+        $arr = ['position' => '>=经理', 'department' => '>=资源部'];
+        $a = new Auth;
+        if(!$a->auth($arr)){
+            return view('40x',['color'=>'warning', 'type'=>'3', 'code'=>'3.1']);
+            exit;
+        }
+
+        $id = Session::get('id');
+        return view('panel.delivery_create', ['id'=>$id]);
+    }
+
+    /**
+     * 存储发货记录
+     *
+     */
+    public function deliveryStore(Requests\Panel\DeliveryRequest $request)
+    {
+        $input = $request->all();
+        $id = Delivery::create($input)->id;
+
+        $s = new Select;
+        $w = new WeChatAPI;
+        $h = new Helper;
+        $rec = Delivery::leftJoin('config as b', 'delivery.unit', '=', 'b.id')
+                        ->leftJoin('members', 'delivery.created_by', '=', 'members.id')
+                        ->select('delivery.*', 'b.name as unitName', 'members.name as createByName')
+                        ->find($id);
+
+        $body = '[发货记录]'.$rec->date.','.$rec->name.floatval($rec->amount).$rec->unitName.'发往'.$rec->company;
+
+        $array = [
+                  'user'       => '31',//8|6|2
+                  // 'department' => '资源部',
+                  // 'seek'       => '>=:经理@运营部', 
+                  'self'       => 'own',
+            ];       
+        
+        $url = $h->app('ssl').'://'.$h->custom('url').'/panel/delivery/show/'.$id;
+        $picurl = $h->app('ssl').'://'.$h->custom('url').'/custom/image/news/delivery.png';
+        $arr_news = [['title'=>'发货记录','description'=>$body,'url'=>$url,'picurl'=>$picurl]];
+        
+        $w->safe = 0;
+        $w->sendNews($s->select($array), $arr_news);
+
+        return redirect('/panel/delivery');
+    }
+
+    /**
+     * 发货记录详细信息
+     *
+     */
+    public function deliveryShow($id)
+    {
+        $arr = ['position' => '>=经理', 'department' => '>=资源部'];
+        $a = new Auth;
+        if(!$a->auth($arr)){
+            return view('40x',['color'=>'warning', 'type'=>'3', 'code'=>'3.1']);
+            exit;
+        }
+
+        $rec = Delivery::leftJoin('config as b', 'delivery.unit', '=', 'b.id')
+                        ->leftJoin('members', 'delivery.created_by', '=', 'members.id')
+                        ->select('delivery.*', 'b.name as unitName', 'members.name as createByName')
+                        ->find($id);
+
+        return view('panel.delivery_show', ['rec'=>$rec]);
+    }
+
+    /**
      * 规章制度主页面
      *
      * @param  int  $id
@@ -322,7 +421,7 @@ class PanelController extends Controller
      * @param
      * @return \Illuminate\Http\Response
      */
-    public function rulesStore(Requests\Complaints\RulesRequest $request)
+    public function rulesStore(Requests\Panel\RulesRequest $request)
     {
         $input = $request->all();
         Rules::create($input);
@@ -356,7 +455,7 @@ class PanelController extends Controller
      * @param
      * @return \Illuminate\Http\Response
      */
-    public function rulesUpdate(Requests\Complaints\RulesRequest $request, $id)
+    public function rulesUpdate(Requests\Panel\RulesRequest $request, $id)
     {
         $rec = Rules::find($id);
         $update = $request->all();
