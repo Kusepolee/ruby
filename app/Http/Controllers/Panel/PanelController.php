@@ -327,8 +327,8 @@ class PanelController extends Controller
         $body = '[发货记录]'.$rec->date.','.$rec->name.floatval($rec->amount).$rec->unitName.'发往'.$rec->company;
 
         $array = [
-                  'user'       => '31',//8|6|2
-                  // 'department' => '资源部',
+                  'user'       => '8|6',//8|6|2
+                  'department' => '资源部',
                   // 'seek'       => '>=:经理@运营部', 
                   'self'       => 'own',
             ];       
