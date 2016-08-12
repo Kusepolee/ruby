@@ -3,7 +3,7 @@
 @section('content')
 
  <div class="container">
- {{-- advice --}}
+    {{-- advice --}}
     <div class="col-md-2 col-sm-4 col-xs-4 wel-grid text-center">
         <div class="btm-clr"><a href="/panel/complaints">
             <figure id="tubiao" class="icon">
@@ -13,6 +13,17 @@
         </div>
     </div>
     {{-- end of advice --}}
+
+    {{-- delivery --}}
+    <div class="col-md-2 col-sm-4 col-xs-4  wel-grid text-center">
+        <div class="btm-clr"><a href="/panel/delivery">
+            <figure id="tubiao2" class="icon">
+                <span class="tubiao yanse2 glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+            </figure></a>
+            <h5>发货记录</h5>
+        </div>
+    </div>
+    {{-- end of delivery --}}
 
     {{-- out proof --}}
     <div class="col-md-2 col-sm-4 col-xs-4 wel-grid btm-gre text-center">
