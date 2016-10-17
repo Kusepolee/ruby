@@ -30,3 +30,5 @@ public/favicon.*
 public/custom/
 
 socket.js
+
+.DS_Store
