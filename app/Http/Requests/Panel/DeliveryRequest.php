@@ -26,6 +26,7 @@ class DeliveryRequest extends Request
     {
         return [
             'name' => 'required',
+            'date' => 'required',
             'amount' => 'required|numeric',
             'sender' => 'required',
             'receiver' => 'required',
