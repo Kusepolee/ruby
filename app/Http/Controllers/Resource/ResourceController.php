@@ -197,7 +197,7 @@ class ResourceController extends Controller
         $h = new Helper;
 
         $array = [
-               // 'user'       => '15',
+              // 'user'       => '6',
               'department' => '资源部',
               //'seek'       => '>=:经理@资源部',
               //'self'       => 'own',
@@ -739,14 +739,14 @@ class ResourceController extends Controller
 
         if ($rec_r->type == 4 || $rec_r->type == 5) {
             $array = [
-              'user'       => '8',
+              'user'       => '8|6',
               'department' => '资源部',
               //'seek'       => '>=:经理@资源部',
               'self'       => 'own',
             ];
         } else {
             $array = [
-              // 'user'       => '8',
+              'user'       => '6',
               'department' => '资源部',
               //'seek'       => '>=:经理@资源部',
               'self'       => 'own',
