@@ -22,6 +22,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/', function () {
+    return view('index');
+});
 Route::get('/login', function () {
     return view('login');
 });
@@ -108,8 +111,13 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::post('/resource/image/store/{id?}', 'Resource\ResourceController@imageStore');
 
 	//产品
+	Route::get('/product_new', function () {
+    return view('product.product_new');
+	});
 	Route::get('/product', 'Product\ProductController@index');
 	Route::get('/product/create', 'Product\ProductController@create');
+	Route::get('/product/publish', 'Product\ProductController@publish');
+	Route::post('/product/publish/store', 'Product\ProductController@publish_store');
 	
 	//财务
 	Route::get('/finance', 'Finance\FinanceController@index');
@@ -148,6 +156,12 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::get('/panel/rules/edit/{id}', 'Panel\PanelController@rulesEdit');
 	Route::post('/panel/rules/update/{id}', 'Panel\PanelController@rulesUpdate');
 	Route::get('/panel/proof', 'Panel\PanelController@proof');
+
+	// - 请假
+	// Route::get('/panel/leave', 'Panel\PanelController@leave');
+	// Route::post('panel/leave/store', 'Panel\PanelController@leaveStore');
+	// Route::get('panel/leave/record', 'Panel\PanelController@leaveRecord');
+	// Route::get('panel/leave/show', 'Panel\PanelController@leaveShow');
 
 	// - 考勤
 	Route::get('/panel/member/check', 'MemberController@check');
