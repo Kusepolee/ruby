@@ -25,6 +25,9 @@ Route::get('/', function () {
 Route::get('/', function () {
     return view('index');
 });
+Route::get('/product_new', function () {
+    return view('product.product_new');
+	});
 Route::get('/login', function () {
     return view('login');
 });
@@ -111,9 +114,7 @@ Route::group(['middleware' => ['wechat_or_login', 'available']], function () {
 	Route::post('/resource/image/store/{id?}', 'Resource\ResourceController@imageStore');
 
 	//产品
-	Route::get('/product_new', function () {
-    return view('product.product_new');
-	});
+	
 	Route::get('/product', 'Product\ProductController@index');
 	Route::get('/product/create', 'Product\ProductController@create');
 	Route::get('/product/publish', 'Product\ProductController@publish');
