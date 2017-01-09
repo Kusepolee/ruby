@@ -37,7 +37,7 @@ class FinanceController extends Controller
         $this->fncName = Session::get('finance_name', '');
 
 		$a = new Auth;
-		if($a->auth(['admin'=>'no', 'position'=>'>=总监', 'department'=>'>=运营部|资源部'])){
+		if($a->auth(['admin'=>'no', 'user'=>'2', 'position'=>'>=总监', 'department'=>'>=运营部|资源部'])){
 			$outs = FinanceOuts::where(function ($query) { 
 	                            if($this->fncDp != 0) $query->where('finance_outs.out_about', $this->fncDp);
 	                            if($this->fncName != 0) $query->where('finance_outs.out_user', $this->fncName);
